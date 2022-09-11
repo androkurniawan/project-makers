@@ -34,9 +34,6 @@ class Hotel(db.Model):
     city = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
     phone = db.Column(db.String, nullable=False, unique=True)
-    capacity_deluxe = db.Column(db.Integer)
-    capacity_standard = db.Column(db.Integer)
-    capacity_superior = db.Column(db.Integer)
 
 class Superior(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -171,11 +168,12 @@ def get_hotel():
     else:
         return {"message":"FAILED to get hotel data. Please check for username and password."}
     
-@app.route('/hotel/<idupdate>', methods=['PUT'])
-def update_hotel(idupdate):
+@app.route('/hotel', methods=['PUT'])
+def update_hotel():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idupdate:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         data = request.get_json()
         h1 = 'hotel_id'
         h2 = 'hotel_name'
@@ -187,7 +185,7 @@ def update_hotel(idupdate):
         if not h1 in data and not h2 in data and not h3 in data and not h4 in data and not h5 in data and not h6 in data and not h7 in data:
             return {"message" : "FAILED updating data. There is no field like that."}
         else:
-            h = Hotel.query.filter_by(id=idupdate).first()
+            h = Hotel.query.filter_by(id=allow2).first()
             if h1 in data:
                 h.id = data['hotel_id']
             if h2 in data:
