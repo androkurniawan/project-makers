@@ -1,5 +1,6 @@
 # from crypt import methods
 import json
+from operator import itruediv
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import base64
@@ -312,17 +313,18 @@ def delete_customer(iddelete):
         return {"message":"ACCESS DENIED !!! You can not delete Customer data."}, 400
     
 # --------------- Superior --------------- #
-@app.route('/hotel/<idpost>/superior', methods=['POST'])
-def create_superior(idpost):
+@app.route('/hotel/superior', methods=['POST'])
+def create_superior():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idpost:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         data = request.get_json()
         s = Superior(
                 facility = data['room_facility'],
                 stock = data['stock'],
                 price = data['price'],
-                hotel_id = idpost
+                hotel_id = allow2
                 )
         db.session.add(s)
         db.session.commit()
@@ -330,11 +332,12 @@ def create_superior(idpost):
     else:
         return {"message" : "FAILED to create Superior room. Access denied."}
 
-@app.route('/hotel/<idget>/superior', methods=['GET'])
-def get_superior(idget):
+@app.route('/hotel/superior', methods=['GET'])
+def get_superior():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idget:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         return jsonify(
             [
                 {
@@ -342,17 +345,18 @@ def get_superior(idget):
                     'stock' : superior.stock,
                     'hotel_id' : superior.hotel_id,
                     'price' : superior.price
-                } for superior in Superior.query.filter_by(hotel_id=idget).all()
+                } for superior in Superior.query.filter_by(hotel_id=allow2).all()
             ] 
             ), 201
     else:
         return {"message":"FAILED to get Superior room data. Please check for username and password."}
 
-@app.route('/hotel/<idupdate>/superior', methods=['PUT'])
-def update_superior(idupdate):
+@app.route('/hotel/superior', methods=['PUT'])
+def update_superior():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idupdate:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         data = request.get_json()
         s1 = 'room_facility'
         s2 = 'stock'
@@ -360,7 +364,7 @@ def update_superior(idupdate):
         if not s1 in data and not s2 in data and not s3 in data:
             return {"message" : "FAILED updating Superior data. There is no field like that."}
         else:
-            s = Superior.query.filter_by(hotel_id=idupdate).first()
+            s = Superior.query.filter_by(hotel_id=allow2).first()
             if s1 in data:
                 s.facility = data['room_facility']
             if s2 in data:
@@ -372,13 +376,14 @@ def update_superior(idupdate):
     else:
         return {"message":"ACCESS DENIED !!! You can not update this Superior room data."}, 400
 
-@app.route('/hotel/<iddelete>/superior', methods=['DELETE'])
-def delete_superior(iddelete):
+@app.route('/hotel/superior', methods=['DELETE'])
+def delete_superior():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == iddelete:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         try:
-            s = Superior.query.filter_by(hotel_id=iddelete).first()
+            s = Superior.query.filter_by(hotel_id=allow2).first()
             if s:
                 db.session.delete(s)
                 db.session.commit()
@@ -391,17 +396,18 @@ def delete_superior(iddelete):
         return {"message":"ACCESS DENIED !!! You can not delete Superior room data."}, 400
 
 # --------------- Deluxe --------------- #
-@app.route('/hotel/<idpost>/deluxe', methods=['POST'])
-def create_deluxe(idpost):
+@app.route('/hotel/deluxe', methods=['POST'])
+def create_deluxe():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idpost:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         data = request.get_json()
         d = Deluxe(
                 facility = data['room_facility'],
                 stock = data['stock'],
                 price = data['price'],
-                hotel_id = idpost
+                hotel_id = allow2
                 )
         db.session.add(d)
         db.session.commit()
@@ -409,11 +415,12 @@ def create_deluxe(idpost):
     else:
         return {"message" : "FAILED to create Deluxe room. Access denied."}
 
-@app.route('/hotel/<idget>/deluxe', methods=['GET'])
-def get_delux(idget):
+@app.route('/hotel/deluxe', methods=['GET'])
+def get_delux():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idget:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         return jsonify(
             [
                 {
@@ -421,17 +428,18 @@ def get_delux(idget):
                     'stock' : deluxe.stock,
                     'hotel_id' : deluxe.hotel_id,
                     'price' : deluxe.price
-                } for deluxe in Deluxe.query.filter_by(hotel_id=idget).all()
+                } for deluxe in Deluxe.query.filter_by(hotel_id=allow2).all()
             ] 
             ), 201
     else:
         return {"message":"FAILED to get Deluxe room data. Please check for username and password."}
 
-@app.route('/hotel/<idupdate>/deluxe', methods=['PUT'])
-def update_deluxe(idupdate):
+@app.route('/hotel/deluxe', methods=['PUT'])
+def update_deluxe():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idupdate:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         data = request.get_json()
         d1 = 'room_facility'
         d2 = 'stock'
@@ -439,7 +447,7 @@ def update_deluxe(idupdate):
         if not d1 in data and not d2 in data and not d3 in data:
             return {"message" : "FAILED updating Deluxe data. There is no field like that."}
         else:
-            d = Deluxe.query.filter_by(hotel_id=idupdate).first()
+            d = Deluxe.query.filter_by(hotel_id=allow2).first()
             if d1 in data:
                 d.facility = data['room_facility']
             if d2 in data:
@@ -451,13 +459,14 @@ def update_deluxe(idupdate):
     else:
         return {"message":"ACCESS DENIED !!! You can not update this Deluxe room data."}, 400
 
-@app.route('/hotel/<iddelete>/deluxe', methods=['DELETE'])
-def delete_deluxe(iddelete):
+@app.route('/hotel/deluxe', methods=['DELETE'])
+def delete_deluxe():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == iddelete:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         try:
-            d = Deluxe.query.filter_by(hotel_id=iddelete).first()
+            d = Deluxe.query.filter_by(hotel_id=allow2).first()
             if d:
                 db.session.delete(d)
                 db.session.commit()
@@ -470,17 +479,18 @@ def delete_deluxe(iddelete):
         return {"message":"ACCESS DENIED !!! You can not delete Deluxe room data."}, 400
 
 # --------------- Standard --------------- #
-@app.route('/hotel/<idpost>/standard', methods=['POST'])
-def create_standard(idpost):
+@app.route('/hotel/standard', methods=['POST'])
+def create_standard():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idpost:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         data = request.get_json()
         s = Standard(
                 facility = data['room_facility'],
                 stock = data['stock'],
                 price = data['price'],
-                hotel_id = idpost
+                hotel_id = allow2
                 )
         db.session.add(s)
         db.session.commit()
@@ -488,11 +498,12 @@ def create_standard(idpost):
     else:
         return {"message" : "FAILED to create Standard room. Access denied."}
 
-@app.route('/hotel/<idget>/standard', methods=['GET'])
-def get_standard(idget):
+@app.route('/hotel/standard', methods=['GET'])
+def get_standard():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idget:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         return jsonify(
             [
                 {
@@ -500,17 +511,18 @@ def get_standard(idget):
                     'stock' : standard.stock,
                     'hotel_id' : standard.hotel_id,
                     'price' : standard.price
-                } for standard in Standard.query.filter_by(hotel_id=idget).all()
+                } for standard in Standard.query.filter_by(hotel_id=allow2).all()
             ] 
             ), 201
     else:
         return {"message":"FAILED to get Standard room data. Please check for username and password."}
 
-@app.route('/hotel/<idupdate>/standard', methods=['PUT'])
-def update_standard(idupdate):
+@app.route('/hotel/standard', methods=['PUT'])
+def update_standard():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == idupdate:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         data = request.get_json()
         s1 = 'room_facility'
         s2 = 'stock'
@@ -518,7 +530,7 @@ def update_standard(idupdate):
         if not s1 in data and not s2 in data and not s3 in data:
             return {"message" : "FAILED updating Standard data. There is no field like that."}
         else:
-            s = Standard.query.filter_by(hotel_id=idupdate).first()
+            s = Standard.query.filter_by(hotel_id=allow2).first()
             if s1 in data:
                 s.facility = data['room_facility']
             if s2 in data:
@@ -530,13 +542,14 @@ def update_standard(idupdate):
     else:
         return {"message":"ACCESS DENIED !!! You can not update this Standard room data."}, 400
 
-@app.route('/hotel/<iddelete>/standard', methods=['DELETE'])
-def delete_standard(iddelete):
+@app.route('/hotel/standard', methods=['DELETE'])
+def delete_standard():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == iddelete:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == allow1:
         try:
-            s = Standard.query.filter_by(hotel_id=iddelete).first()
+            s = Standard.query.filter_by(hotel_id=allow2).first()
             if s:
                 db.session.delete(s)
                 db.session.commit()
