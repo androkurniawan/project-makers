@@ -12,9 +12,8 @@ app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:12345678@localhost:
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
-    booking_date = db.Column(db.DateTime, nullable=False)
-    checkin = db.Column(db.DateTime, nullable=False)
-    checkout = db.Column(db.DateTime, nullable=False)
+    checkin = db.Column(db.Date, nullable=False)
+    checkout = db.Column(db.Date, nullable=False)
     superior = db.Column(db.Integer)
     deluxe = db.Column(db.Integer)
     standard = db.Column(db.Integer)
@@ -716,8 +715,8 @@ def top_user():
         }
 
 # --------------- Searching Hotels --------------- #
-@app.route('/searchRoom', methods=['GET'])
-def searchRoom():
+@app.route('/searching', methods=['GET'])
+def search_hotel():
     data = request.get_json()
     k = db.engine.execute(f'''
         select COALESCE((su.stock - sum(xx.superior)),0) as avail_superior, COALESCE((de.stock - sum(xx.deluxe)),0) as avail_deluxe, COALESCE((st.stock - sum(xx.standard)),0) as avail_standard, city, address, name, su.stock as cap_su, de.stock as cap_de, st.stock as cap_st, ho.id as ident from booking as xx join superior as su on su.hotel_id = xx.hotel_id join deluxe as de on de.hotel_id = xx.hotel_id join standard as st on st.hotel_id = xx.hotel_id join hotel as ho on ho.id = xx.hotel_id where (xx.checkin, xx.checkout) overlaps ('{data['checkin']}'::date, '{data['checkout']}'::date) and xx.hotel_id in (select id from hotel) and ho.city ilike '%%{data['city']}%%' group by su.stock, de.stock, st.stock, city, address, name, ident
@@ -776,73 +775,6 @@ def another_result():
                 "address": Hotel.query.filter_by(id=c).first().address
             })
     return x
-
-
-
-
-
-# for j in m:
-    #     for i in k:
-    #         if j[0] != i[9]:
-    #             x.append({
-    #                 "hotel_name": Hotel.query.filter_by(id=j[0]).first().name,
-    #                 "superior_stock": Superior.query.filter_by(hotel_id=j[0]).first().stock,
-    #                 "deluxe_stock": Deluxe.query.filter_by(hotel_id=j[0]).first().stock,
-    #                 "standard_stock": Standard.query.filter_by(hotel_id=j[0]).first().stock,
-    #                 "city": Hotel.query.filter_by(id=j[0]).first().city,
-    #                 "address": Hotel.query.filter_by(id=j[0]).first().address
-    #             })
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        # if i[0]==None and i[1]==None and i[2]==None:
-        #     # return searchAllRoom(data)
-        #     m = db.engine.execute(f'''
-        #         select xx.stock as sup, yy.stock as del, zz.stock as sta from superior xx inner join deluxe yy on xx.hotel_id = yy.hotel_id inner join standard zz on xx.   hotel_id = zz.hotel_id where xx.hotel_id in (select id from hotel)
-        #     ''')
-        #     y = []
-        #     for j in m:
-        #         x.append({
-        #             "namaHotel": i[5],
-        #             "superior": j[0],
-        #             "deluxe": j[1],
-        #             "standard": j[2]
-        #         })
-        #     return print("klo")
-    # else:
-    #     return jsonify(x)
-
-# def searchAllRoom(data):
-#     k = db.engine.execute(f'''
-#         select xx.stock as sup, yy.stock as del, zz.stock as sta from superior xx inner join deluxe yy on xx.hotel_id = yy.hotel_id inner join standard zz on xx.hotel_id = zz.hotel_id where xx.hotel_id = {data['hotel_id']}
-#     ''')
-    
-#     x = []
-#     for i in k:
-#         x.append({
-#             "namaHotel": Hotel.query.filter_by(id=data['hotel_id']).first().name,
-#             "superior": i[0],
-#             "deluxe": i[1],
-#             "standard": i[2]
-#         })
-#     return jsonify(x)
-
-
-
-
-
-
-
+     
 if __name__ == '__main__':
 	app.run()
