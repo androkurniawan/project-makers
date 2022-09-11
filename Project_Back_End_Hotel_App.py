@@ -1,6 +1,4 @@
-# from crypt import methods
-import json
-from operator import itruediv
+# import json
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import base64
@@ -575,7 +573,6 @@ def create_booking():
         h = Hotel.query.filter_by(id=data['hotel_id']).first()
         if (s.stock > 0 or d.stock > 0 or st.stock > 0) and (s.stock >= data['amount_of_superior_room'] and d.stock >= data['amount_of_deluxe_room'] and st.stock >= data['amount_of_standard_room']) and (data['amount_of_superior_room'] >= 0 and data['amount_of_deluxe_room'] >=0 and data['amount_of_standard_room'] >= 0):
             b = Booking(
-                    booking_date = data['booking_date'],
                     checkin = data['check_in_date'],
                     checkout = data['check_out_date'],
                     superior = data['amount_of_superior_room'],
@@ -592,20 +589,20 @@ def create_booking():
         else:
             return {"message" : "The amount of rooms booked cannot exceed stock and must be positive integer number."}
     else:
-        return {"message" : "FAILED to Booking a hotel."}
+        return {"message" : "FAILED Booking a hotel."}
 
 @app.route('/booking', methods=['GET'])
 def get_booking():
     identity = request.headers.get('Authorization')
-    allow1 = auth_customer1(identity)
-    allow3 = auth_hotel1(identity)
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    allow3 = auth_customer1(identity)
+    allow4 = auth_customer2(identity)
     if allow1 == True:
-        allow2 = auth_customer2(identity)
         return jsonify(
             [
                 {
                     'hotel_name' : booking.hotel_name,
-                    'booking_date' : booking.booking_date,
                     'check_in_date' : booking.checkin,
                     'check_out_date' : booking.checkout,
                     'amount_of_superior_room' : booking.superior,
@@ -613,16 +610,14 @@ def get_booking():
                     'amount_of_standard_room' : booking.standard,
                     'total_price' : booking.total_price,
                     'rating' : booking.rating
-                } for booking in Booking.query.filter_by(customer_id=allow2).all()
+                } for booking in Booking.query.filter_by(hotel_id=allow2).all()
             ]
             ), 201
     elif allow3 == True:
-        allow4 = auth_hotel2(identity)
         return jsonify(
             [
                 {
                     'hotel_name' : booking.hotel_name,
-                    'booking_date' : booking.booking_date,
                     'check_in_date' : booking.checkin,
                     'check_out_date' : booking.checkout,
                     'amount_of_superior_room' : booking.superior,
@@ -631,7 +626,7 @@ def get_booking():
                     'total_price' : booking.total_price,
                     'rating' : booking.rating,
                     'customer_id' : booking.customer_id
-                } for booking in Booking.query.filter_by(hotel_id=allow4).all()
+                } for booking in Booking.query.filter_by(customer_id=allow4).all()
             ]
             ), 201
     else:
@@ -675,7 +670,7 @@ def give_rating():
                 db.session.commit()
                 return {'message': 'SUCCESFULLY give rating.'}, 201
     else:
-        return {"message":"ACCESS DENIED !!! You can not give rating to this booking."}, 400
+        return {"message":"ACCESS DENIED !!! You can not give rating."}, 400
   
 # --------------- Most Popular Hotel --------------- #
 @app.route('/tophotel', methods=['GET'])
