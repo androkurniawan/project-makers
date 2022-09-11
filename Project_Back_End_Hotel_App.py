@@ -203,22 +203,23 @@ def update_hotel():
             db.session.commit()
             return {'message': 'SUCCESFULLY update data.'}, 201
     else:
-        return {"message":"ACCESS DENIED !!! You can not update this Hotel data."}, 400
+        return {"message":"ACCESS DENIED !!! You can not update Hotel data."}, 400
 
-@app.route('/hotel/<iddelete>', methods=['DELETE'])    
-def delete_hotel(iddelete):
+@app.route('/hotel', methods=['DELETE'])    
+def delete_hotel():
     identity = request.headers.get('Authorization')
-    allow = auth_hotel2(identity)
-    if allow == iddelete:
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    if allow1 == True:
         try:
-            h = Hotel.query.filter_by(id=iddelete).first()
+            h = Hotel.query.filter_by(id=allow2).first()
             db.session.delete(h)
             db.session.commit()
         except:
             return {"message":"FAILED to delete Hotel. Before delete Hotel, you must UNLINK the rooms that using this Hotel."}, 400
         return {"message":"SUCCESSFULLY delete Hotel."}, 200
     else:
-        return {"message":"ACCESS DENIED !!! You can not delete Hotel data."}, 400
+        return {"message":"ACCESS DENIED !!! You can not delete Hotel."}, 400
 
 # --------------- Customer --------------- #
 @app.route('/customer', methods=['POST'])
@@ -240,12 +241,13 @@ def create_customer():
     else:
         return {"message" : "FAILED to create Customer. The username had been taken."}
 
-@app.route('/customer/<idget>', methods=['GET'])
-def get_customer(idget):
+@app.route('/customer', methods=['GET'])
+def get_customer():
     identity = request.headers.get('Authorization')
-    allow = auth_customer2(identity)
-    if allow == idget:
-        customer = Customer.query.filter_by(id=idget).first()
+    allow1 = auth_customer1(identity)
+    allow2 = auth_customer2(identity)
+    if allow1 == True:
+        customer = Customer.query.filter_by(id=allow2).first()
         return jsonify(
             [
                 {
@@ -260,11 +262,12 @@ def get_customer(idget):
     else:
         return {"message":"FAILED to get customer data. Please check for username and password."}
 
-@app.route('/customer/<idupdate>', methods=['PUT'])
-def update_customer(idupdate):
+@app.route('/customer', methods=['PUT'])
+def update_customer():
     identity = request.headers.get('Authorization')
-    allow = auth_customer2(identity)
-    if allow == idupdate:
+    allow1 = auth_customer1(identity)
+    allow2 = auth_customer2(identity)
+    if allow1 == True:
         data = request.get_json()
         c1 = 'customer_id'
         c2 = 'customer_name'
@@ -275,7 +278,7 @@ def update_customer(idupdate):
         if not c1 in data and not c2 in data and not c3 in data and not c4 in data and not c5 in data and not c6 in data:
             return {"message" : "FAILED updating data. There is no field like that."}
         else:
-            c = Customer.query.filter_by(id=idupdate).first()
+            c = Customer.query.filter_by(id=allow2).first()
             if 'customer_id' in data:
                 c.id = data['customer_id']
             if 'customer_name' in data:
@@ -291,7 +294,7 @@ def update_customer(idupdate):
             db.session.commit()
             return {'message': 'SUCCESFULLY update data.'}, 201
     else:
-        return {"message":"ACCESS DENIED !!! You can not update this Customer data."}, 400
+        return {"message":"ACCESS DENIED !!! You can not update Customer data."}, 400
 
 @app.route('/customer/<iddelete>', methods=['DELETE'])
 def delete_customer(iddelete):
