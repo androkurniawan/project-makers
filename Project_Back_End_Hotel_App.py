@@ -727,28 +727,32 @@ def top_user():
 @app.route('/searching', methods=['GET'])
 def search_hotel():
     data = request.get_json()
-    k = db.engine.execute(f'''
-        select COALESCE((su.stock - sum(xx.superior)),0) as avail_superior, COALESCE((de.stock - sum(xx.deluxe)),0) as avail_deluxe, COALESCE((st.stock - sum(xx.standard)),0) as avail_standard, city, address, name, su.stock as cap_su, de.stock as cap_de, st.stock as cap_st, ho.id as ident from booking as xx join superior as su on su.hotel_id = xx.hotel_id join deluxe as de on de.hotel_id = xx.hotel_id join standard as st on st.hotel_id = xx.hotel_id join hotel as ho on ho.id = xx.hotel_id where (xx.checkin, xx.checkout) overlaps ('{data['checkin']}'::date, '{data['checkout']}'::date) and xx.hotel_id in (select id from hotel) and ho.city ilike '%%{data['city']}%%' group by su.stock, de.stock, st.stock, city, address, name, ident
-    ''')
+    if data['checkin'] <= data['checkout']:
+        k = db.engine.execute(f'''
+            select COALESCE((su.stock - sum(xx.superior)),0) as avail_superior, COALESCE((de.stock - sum(xx.deluxe)),0) as avail_deluxe, COALESCE((st.stock - sum(xx.standard)),0) as avail_standard, city, address, name, su.stock as cap_su, de.stock as cap_de, st.stock as cap_st, ho.id as ident from booking as xx join superior as su on su.hotel_id = xx.hotel_id join deluxe as de on de.hotel_id = xx.hotel_id join standard as st on st.hotel_id = xx.hotel_id join hotel as ho on ho.id = xx.hotel_id where (xx.checkin, xx.checkout) overlaps ('{data['checkin']}'::date, '{data['checkout']}'::date) and xx.hotel_id in (select id from hotel) and ho.city ilike '%%{data['city']}%%' group by su.stock, de.stock, st.stock, city, address, name, ident
+        ''')
 
-    x = []
-    for i in k:
-        x.append({
-                "hotel_name": i[5],
-                "superior_stock": i[0],
-                "deluxe_stock": i[1],
-                "standard_stock": i[2],
-                "city": i[3],
-                "address": i[4]
-            })
-    if len(x) != 0:
-        return {"Available_Hotels_and_its_stocks" : [x, another_result()]}
+        x = []
+        for i in k:
+            x.append({
+                    "hotel_name": i[5],
+                    "superior_stock": i[0],
+                    "deluxe_stock": i[1],
+                    "standard_stock": i[2],
+                    "city": i[3],
+                    "address": i[4]
+                })
+        if len(x) != 0:
+            return {"Available_Hotels_and_its_stocks" : [x, another_result()]}
+        else:
+            return {"Available_Hotels_and_its_stocks" : initial_condition()}
     else:
-        return {"Available_Hotels_and_its_stocks" : initial_condition()}
+        return {"message" : "Please enter the dates correctly."}
 
 def initial_condition():
+    data = request.get_json()
     x = []
-    m = db.engine.execute(f''' select id from hotel order by id ''')
+    m = db.engine.execute(f''' select id from hotel where city ilike '%%{data['city']}%%' ''')
     for j in m:
         x.append({
                     "hotel_name": Hotel.query.filter_by(id=j[0]).first().name,
@@ -765,7 +769,7 @@ def another_result():
     k = db.engine.execute(f'''
         select COALESCE((su.stock - sum(xx.superior)),0) as avail_superior, COALESCE((de.stock - sum(xx.deluxe)),0) as avail_deluxe, COALESCE((st.stock - sum(xx.standard)),0) as avail_standard, city, address, name, su.stock as cap_su, de.stock as cap_de, st.stock as cap_st, ho.id as ident from booking as xx join superior as su on su.hotel_id = xx.hotel_id join deluxe as de on de.hotel_id = xx.hotel_id join standard as st on st.hotel_id = xx.hotel_id join hotel as ho on ho.id = xx.hotel_id where (xx.checkin, xx.checkout) overlaps ('{data['checkin']}'::date, '{data['checkout']}'::date) and xx.hotel_id in (select id from hotel) group by su.stock, de.stock, st.stock, city, address, name, ident
     ''')
-    m = db.engine.execute(f''' select id from hotel order by id ''')
+    m = db.engine.execute(f''' select id from hotel where city ilike '%%{data['city']}%%' ''')
     x = []
     y = []
     z = []
