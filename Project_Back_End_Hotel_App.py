@@ -241,507 +241,255 @@ def delete_hotel():
         return {"message":"ACCESS DENIED !!! You can not delete Hotel."}, 400
 
 # --------------- Customer --------------- #
-# @app.route('/customer', methods=['POST'])
-# def create_customer():
-#     data = request.get_json()
-#     customer = Customer.query.filter_by(username=data['username']).first()
-#     hotel = Hotel.query.filter_by(username=data['username']).first()
-#     if not customer and not hotel:
-#         c = Customer(
-#             username = data['username'],
-#             password = data['password'],
-#             name = data['customer_name'],
-#             phone = data['customer_phone'],
-#             email = data['customer_email']
-#             )
-#         db.session.add(c)
-#         db.session.commit()
-#         return {"message" : "SUCCESSFULLY create a new Customer."}
-#     else:
-#         return {"message" : "FAILED to create Customer. The username had been taken."}
+@app.route('/customer', methods=['POST'])
+def create_customer():
+    data = request.get_json()
+    customer = Customer.query.filter_by(username=data['username']).first()
+    hotel = Hotel.query.filter_by(username=data['username']).first()
+    if not customer and not hotel:
+        c = Customer(
+            username = data['username'],
+            password = data['password'],
+            name = data['customer_name'],
+            phone = data['customer_phone'],
+            email = data['customer_email']
+            )
+        db.session.add(c)
+        db.session.commit()
+        return {"message" : "SUCCESSFULLY create a new Customer."}
+    else:
+        return {"message" : "FAILED to create Customer. The username had been taken."}
 
-# @app.route('/customer', methods=['GET'])
-# def get_customer():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_customer1(identity)
-#     allow2 = auth_customer2(identity)
-#     if allow1 == True:
-#         customer = Customer.query.filter_by(id=allow2).first()
-#         return jsonify(
-#             [
-#                 {
-#                     'username' : customer.username,
-#                     'password' : customer.password,
-#                     'customer_name' : customer.name,
-#                     'customer_phone' : customer.phone,
-#                     'customer_email' : customer.email
-#                 }
-#             ]
-#             ), 201
-#     else:
-#         return {"message":"FAILED to get customer data. Please check for username and password."}
+@app.route('/customer', methods=['GET'])
+def get_customer():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_customer1(identity)
+    allow2 = auth_customer2(identity)
+    if allow1 == True:
+        customer = Customer.query.filter_by(id=allow2).first()
+        return jsonify(
+            [
+                {
+                    'username' : customer.username,
+                    'password' : customer.password,
+                    'customer_name' : customer.name,
+                    'customer_phone' : customer.phone,
+                    'customer_email' : customer.email
+                }
+            ]
+            ), 201
+    else:
+        return {"message":"FAILED to get customer data. Please check for username and password."}
 
-# @app.route('/customer', methods=['PUT'])
-# def update_customer():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_customer1(identity)
-#     allow2 = auth_customer2(identity)
-#     if allow1 == True:
-#         data = request.get_json()
-#         c1 = 'customer_id'
-#         c2 = 'customer_name'
-#         c3 = 'username'
-#         c4 = 'password'
-#         c5 = 'customer_phone'
-#         c6 = 'customer_email'
-#         if not c1 in data and not c2 in data and not c3 in data and not c4 in data and not c5 in data and not c6 in data:
-#             return {"message" : "FAILED updating data. There is no field like that."}
-#         else:
-#             c = Customer.query.filter_by(id=allow2).first()
-#             if 'customer_id' in data:
-#                 c.id = data['customer_id']
-#             if 'customer_name' in data:
-#                 c.name = data['customer_name']
-#             if 'username' in data:
-#                 c.username = data['username']
-#             if 'password' in data:
-#                 c.password = data['password']
-#             if 'customer_phone' in data:
-#                 c.phone = data['customer_phone']
-#             if 'customer_email' in data:
-#                 c.email = data['customer_email']
-#             db.session.commit()
-#             return {'message': 'SUCCESFULLY update data.'}, 201
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not update Customer data."}, 400
+@app.route('/customer', methods=['PUT'])
+def update_customer():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_customer1(identity)
+    allow2 = auth_customer2(identity)
+    if allow1 == True:
+        data = request.get_json()
+        c1 = 'customer_id'
+        c2 = 'customer_name'
+        c3 = 'username'
+        c4 = 'password'
+        c5 = 'customer_phone'
+        c6 = 'customer_email'
+        if not c1 in data and not c2 in data and not c3 in data and not c4 in data and not c5 in data and not c6 in data:
+            return {"message" : "FAILED updating data. There is no field like that."}
+        else:
+            c = Customer.query.filter_by(id=allow2).first()
+            if 'customer_id' in data:
+                c.id = data['customer_id']
+            if 'customer_name' in data:
+                c.name = data['customer_name']
+            if 'username' in data:
+                c.username = data['username']
+            if 'password' in data:
+                c.password = data['password']
+            if 'customer_phone' in data:
+                c.phone = data['customer_phone']
+            if 'customer_email' in data:
+                c.email = data['customer_email']
+            db.session.commit()
+            return {'message': 'SUCCESFULLY update data.'}, 201
+    else:
+        return {"message":"ACCESS DENIED !!! You can not update Customer data."}, 400
 
-# @app.route('/customer/<iddelete>', methods=['DELETE'])
-# def delete_customer(iddelete):
-#     identity = request.headers.get('Authorization')
-#     allow = auth_customer2(identity)
-#     if allow == iddelete:
-#         try:
-#             c = Customer.query.filter_by(id=iddelete).first()
-#             db.session.delete(c)
-#             db.session.commit()
-#         except:
-#             return {"message":"FAILED to delete Customer."}, 400
-#         return {"message":"SUCCESSFULLY delete Customer."}, 200
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not delete Customer data."}, 400
+@app.route('/customer', methods=['DELETE'])
+def delete_customer():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_customer1(identity)
+    allow2 = auth_customer2(identity)
+    if allow1 == True:
+        try:
+            c = Customer.query.filter_by(id=allow2).first()
+            db.session.delete(c)
+            db.session.commit()
+        except:
+            return {"message":"FAILED to delete Customer."}, 400
+        return {"message":"SUCCESSFULLY delete Customer."}, 200
+    else:
+        return {"message":"ACCESS DENIED !!! You can not delete Customer data."}, 400
     
-# # --------------- Superior --------------- #
-# @app.route('/hotel/superior', methods=['POST'])
-# def create_superior():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         data = request.get_json()
-#         s = Superior(
-#                 facility = data['room_facility'],
-#                 stock = data['stock'],
-#                 price = data['price'],
-#                 hotel_id = allow2
-#                 )
-#         db.session.add(s)
-#         db.session.commit()
-#         return {"message" : "SUCCESSFULLY create SUPERIOR room."}
-#     else:
-#         return {"message" : "FAILED to create Superior room. Access denied."}
+# --------------- Booking --------------- #
+@app.route('/booking', methods=['POST'])
+def create_booking():
+    identity = request.headers.get('Authorization')
+    allow = auth_customer1(identity)
+    if allow == True:
+        c_id = auth_customer2(identity)
+        data = request.get_json()
+        h = Hotel.query.filter_by(id=data['hotel_id']).first()
+        if (h.superior_capacity >= data['amount_of_superior_room'] and h.deluxe_capacity >= data['amount_of_deluxe_room'] and h.standard_capacity >= data['amount_of_standard_room']) and (data['amount_of_superior_room'] >= 0 and data['amount_of_deluxe_room'] >=0 and data['amount_of_standard_room'] >= 0):
+            b = Booking(
+                    checkin = data['check_in_date'],
+                    checkout = data['check_out_date'],
+                    superior = data['amount_of_superior_room'],
+                    deluxe = data['amount_of_deluxe_room'],
+                    standard = data['amount_of_standard_room'],
+                    total_price = (data['amount_of_superior_room']*h.superior_price) + (data['amount_of_deluxe_room']*h.deluxe_price) + (data['amount_of_standard_room']*h.standard_price),
+                    hotel_id = data['hotel_id'],
+                    customer_id = c_id,
+                    )
+            db.session.add(b)
+            db.session.commit()
+            return {"message" : "SUCCESSFULLY Booking a hotel."}
+        else:
+            return {"message" : "The amount of rooms booked cannot exceed stock and must be positive integer number."}
+    else:
+        return {"message" : "FAILED Booking a hotel. Please check username and password."}
 
-# @app.route('/hotel/superior', methods=['GET'])
-# def get_superior():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         return jsonify(
-#             [
-#                 {
-#                     'room_facility' : superior.facility,
-#                     'stock' : superior.stock,
-#                     'hotel_id' : superior.hotel_id,
-#                     'price' : superior.price
-#                 } for superior in Superior.query.filter_by(hotel_id=allow2).all()
-#             ] 
-#             ), 201
-#     else:
-#         return {"message":"FAILED to get Superior room data. Please check for username and password."}
+@app.route('/booking', methods=['GET'])
+def get_booking():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_hotel2(identity)
+    allow3 = auth_customer1(identity)
+    allow4 = auth_customer2(identity)
+    if allow1 == True:
+        return jsonify(
+            [
+                {
+                    'hotel_id' : booking.hotel_id,
+                    'check_in_date' : booking.checkin,
+                    'check_out_date' : booking.checkout,
+                    'amount_of_superior_room' : booking.superior,
+                    'amount_of_deluxe_room' : booking.deluxe,
+                    'amount_of_standard_room' : booking.standard,
+                    'total_price' : booking.total_price,
+                    'rating' : booking.rating
+                } for booking in Booking.query.filter_by(hotel_id=allow2).all()
+            ]
+            ), 201
+    elif allow3 == True:
+        return jsonify(
+            [
+                {
+                    'hotel_name' : booking.hotel_id,
+                    'check_in_date' : booking.checkin,
+                    'check_out_date' : booking.checkout,
+                    'amount_of_superior_room' : booking.superior,
+                    'amount_of_deluxe_room' : booking.deluxe,
+                    'amount_of_standard_room' : booking.standard,
+                    'total_price' : booking.total_price,
+                    'rating' : booking.rating,
+                    'customer_id' : booking.customer_id
+                } for booking in Booking.query.filter_by(customer_id=allow4).all()
+            ]
+            ), 201
+    else:
+        return {"message":"FAILED to get Booking records. Please check for username and password."}
 
-# @app.route('/hotel/superior', methods=['PUT'])
-# def update_superior():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         data = request.get_json()
-#         s1 = 'room_facility'
-#         s2 = 'stock'
-#         s3 = 'price'
-#         if not s1 in data and not s2 in data and not s3 in data:
-#             return {"message" : "FAILED updating Superior data. There is no field like that."}
-#         else:
-#             s = Superior.query.filter_by(hotel_id=allow2).first()
-#             if s1 in data:
-#                 s.facility = data['room_facility']
-#             if s2 in data:
-#                 s.stock = data['stock']
-#             if s3 in data:
-#                 s.price = data['price']
-#             db.session.commit()
-#             return {'message': 'SUCCESFULLY update Superior room data.'}, 201
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not update this Superior room data."}, 400
+@app.route('/booking', methods=['DELETE'])
+def delete_booking():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_customer1(identity)
+    allow2 = auth_customer2(identity)
+    if allow1 == True:
+        try:
+            b = Booking.query.filter_by(hotel_id=allow2).first()
+            if b:
+                db.session.delete(b)
+                db.session.commit()
+            else:
+                return {"message" : "There is no Booking record."}
+        except:
+            return {"message":"FAILED to delete a Booking."}, 400
+        return {"message":"SUCCESSFULLY delete a Booking record."}, 200
+    else:
+        return {"message":"ACCESS DENIED !!! You can not delete Booking record data."}, 400
 
-# @app.route('/hotel/superior', methods=['DELETE'])
-# def delete_superior():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         try:
-#             s = Superior.query.filter_by(hotel_id=allow2).first()
-#             if s:
-#                 db.session.delete(s)
-#                 db.session.commit()
-#             else:
-#                 return {"message" : "There is no Superior room."}
-#         except:
-#             return {"message":"FAILED to delete Superior room."}, 400
-#         return {"message":"SUCCESSFULLY delete Superior room."}, 200
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not delete Superior room data."}, 400
-
-# # --------------- Deluxe --------------- #
-# @app.route('/hotel/deluxe', methods=['POST'])
-# def create_deluxe():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         data = request.get_json()
-#         d = Deluxe(
-#                 facility = data['room_facility'],
-#                 stock = data['stock'],
-#                 price = data['price'],
-#                 hotel_id = allow2
-#                 )
-#         db.session.add(d)
-#         db.session.commit()
-#         return {"message" : "SUCCESSFULLY create Deluxe room."}
-#     else:
-#         return {"message" : "FAILED to create Deluxe room. Access denied."}
-
-# @app.route('/hotel/deluxe', methods=['GET'])
-# def get_delux():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         return jsonify(
-#             [
-#                 {
-#                     'room_facility' : deluxe.facility,
-#                     'stock' : deluxe.stock,
-#                     'hotel_id' : deluxe.hotel_id,
-#                     'price' : deluxe.price
-#                 } for deluxe in Deluxe.query.filter_by(hotel_id=allow2).all()
-#             ] 
-#             ), 201
-#     else:
-#         return {"message":"FAILED to get Deluxe room data. Please check for username and password."}
-
-# @app.route('/hotel/deluxe', methods=['PUT'])
-# def update_deluxe():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         data = request.get_json()
-#         d1 = 'room_facility'
-#         d2 = 'stock'
-#         d3 = 'price'
-#         if not d1 in data and not d2 in data and not d3 in data:
-#             return {"message" : "FAILED updating Deluxe data. There is no field like that."}
-#         else:
-#             d = Deluxe.query.filter_by(hotel_id=allow2).first()
-#             if d1 in data:
-#                 d.facility = data['room_facility']
-#             if d2 in data:
-#                 d.stock = data['stock']
-#             if d3 in data:
-#                 d.price = data['price']
-#             db.session.commit()
-#             return {'message': 'SUCCESFULLY update Deluxe room data.'}, 201
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not update this Deluxe room data."}, 400
-
-# @app.route('/hotel/deluxe', methods=['DELETE'])
-# def delete_deluxe():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         try:
-#             d = Deluxe.query.filter_by(hotel_id=allow2).first()
-#             if d:
-#                 db.session.delete(d)
-#                 db.session.commit()
-#             else:
-#                 return {"message" : "There is no Deluxe room."}
-#         except:
-#             return {"message":"FAILED to delete Deluxe room."}, 400
-#         return {"message":"SUCCESSFULLY delete Deluxe room."}, 200
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not delete Deluxe room data."}, 400
-
-# # --------------- Standard --------------- #
-# @app.route('/hotel/standard', methods=['POST'])
-# def create_standard():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         data = request.get_json()
-#         s = Standard(
-#                 facility = data['room_facility'],
-#                 stock = data['stock'],
-#                 price = data['price'],
-#                 hotel_id = allow2
-#                 )
-#         db.session.add(s)
-#         db.session.commit()
-#         return {"message" : "SUCCESSFULLY create Standard room."}
-#     else:
-#         return {"message" : "FAILED to create Standard room. Access denied."}
-
-# @app.route('/hotel/standard', methods=['GET'])
-# def get_standard():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         return jsonify(
-#             [
-#                 {
-#                     'room_facility' : standard.facility,
-#                     'stock' : standard.stock,
-#                     'hotel_id' : standard.hotel_id,
-#                     'price' : standard.price
-#                 } for standard in Standard.query.filter_by(hotel_id=allow2).all()
-#             ] 
-#             ), 201
-#     else:
-#         return {"message":"FAILED to get Standard room data. Please check for username and password."}
-
-# @app.route('/hotel/standard', methods=['PUT'])
-# def update_standard():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         data = request.get_json()
-#         s1 = 'room_facility'
-#         s2 = 'stock'
-#         s3 = 'price'
-#         if not s1 in data and not s2 in data and not s3 in data:
-#             return {"message" : "FAILED updating Standard data. There is no field like that."}
-#         else:
-#             s = Standard.query.filter_by(hotel_id=allow2).first()
-#             if s1 in data:
-#                 s.facility = data['room_facility']
-#             if s2 in data:
-#                 s.stock = data['stock']
-#             if s3 in data:
-#                 s.price = data['price']
-#             db.session.commit()
-#             return {'message': 'SUCCESFULLY update Standard room data.'}, 201
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not update this Standard room data."}, 400
-
-# @app.route('/hotel/standard', methods=['DELETE'])
-# def delete_standard():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == allow1:
-#         try:
-#             s = Standard.query.filter_by(hotel_id=allow2).first()
-#             if s:
-#                 db.session.delete(s)
-#                 db.session.commit()
-#             else:
-#                 return {"message" : "There is no Standard room."}
-#         except:
-#             return {"message":"FAILED to delete Standard room."}, 400
-#         return {"message":"SUCCESSFULLY delete Standard room."}, 200
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not delete Standard room data."}, 400
-
-# # --------------- Booking --------------- #
-# @app.route('/booking', methods=['POST'])
-# def create_booking():
-#     identity = request.headers.get('Authorization')
-#     allow = auth_customer1(identity)
-#     if allow == True:
-#         c_id = auth_customer2(identity)
-#         data = request.get_json()
-#         s = Superior.query.filter_by(hotel_id=data['hotel_id']).first()
-#         d = Deluxe.query.filter_by(hotel_id=data['hotel_id']).first()
-#         st = Standard.query.filter_by(hotel_id=data['hotel_id']).first()
-#         h = Hotel.query.filter_by(id=data['hotel_id']).first()
-#         if (s.stock > 0 or d.stock > 0 or st.stock > 0) and (s.stock >= data['amount_of_superior_room'] and d.stock >= data['amount_of_deluxe_room'] and st.stock >= data['amount_of_standard_room']) and (data['amount_of_superior_room'] >= 0 and data['amount_of_deluxe_room'] >=0 and data['amount_of_standard_room'] >= 0):
-#             b = Booking(
-#                     checkin = data['check_in_date'],
-#                     checkout = data['check_out_date'],
-#                     superior = data['amount_of_superior_room'],
-#                     deluxe = data['amount_of_deluxe_room'],
-#                     standard = data['amount_of_standard_room'],
-#                     total_price = (data['amount_of_superior_room']*s.price) + (data['amount_of_deluxe_room']*d.price) + (data['amount_of_standard_room']*st.price),
-#                     hotel_id = data['hotel_id'],
-#                     customer_id = c_id,
-#                     hotel_name = h.name
-#                     )
-#             db.session.add(b)
-#             db.session.commit()
-#             return {"message" : "SUCCESSFULLY Booking a hotel."}
-#         else:
-#             return {"message" : "The amount of rooms booked cannot exceed stock and must be positive integer number."}
-#     else:
-#         return {"message" : "FAILED Booking a hotel."}
-
-# @app.route('/booking', methods=['GET'])
-# def get_booking():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     allow3 = auth_customer1(identity)
-#     allow4 = auth_customer2(identity)
-#     if allow1 == True:
-#         return jsonify(
-#             [
-#                 {
-#                     'hotel_name' : booking.hotel_name,
-#                     'check_in_date' : booking.checkin,
-#                     'check_out_date' : booking.checkout,
-#                     'amount_of_superior_room' : booking.superior,
-#                     'amount_of_deluxe_room' : booking.deluxe,
-#                     'amount_of_standard_room' : booking.standard,
-#                     'total_price' : booking.total_price,
-#                     'rating' : booking.rating
-#                 } for booking in Booking.query.filter_by(hotel_id=allow2).all()
-#             ]
-#             ), 201
-#     elif allow3 == True:
-#         return jsonify(
-#             [
-#                 {
-#                     'hotel_name' : booking.hotel_name,
-#                     'check_in_date' : booking.checkin,
-#                     'check_out_date' : booking.checkout,
-#                     'amount_of_superior_room' : booking.superior,
-#                     'amount_of_deluxe_room' : booking.deluxe,
-#                     'amount_of_standard_room' : booking.standard,
-#                     'total_price' : booking.total_price,
-#                     'rating' : booking.rating,
-#                     'customer_id' : booking.customer_id
-#                 } for booking in Booking.query.filter_by(customer_id=allow4).all()
-#             ]
-#             ), 201
-#     else:
-#         return {"message":"FAILED to get Booking records. Please check for username and password."}
-
-# @app.route('/booking', methods=['DELETE'])
-# def delete_booking():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_hotel2(identity)
-#     if allow1 == True:
-#         try:
-#             b = Booking.query.filter_by(hotel_id=allow2).first()
-#             if b:
-#                 db.session.delete(b)
-#                 db.session.commit()
-#             else:
-#                 return {"message" : "There is no Booking record."}
-#         except:
-#             return {"message":"FAILED to delete a Booking."}, 400
-#         return {"message":"SUCCESSFULLY delete a Booking record."}, 200
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not delete Booking record data."}, 400
-
-# @app.route('/rating', methods=['PUT'])
-# def give_rating():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_customer1(identity)
-#     allow2 = auth_customer2(identity)
-#     r = Booking.query.filter_by(customer_id=allow2).filter_by(rating=None).first()
-#     if allow1 == True:
-#         if not r:
-#             return {"message" : "You don't have a booking record that needs to be rated."}
-#         else:
-#             data = request.get_json()
-#             if not 'rating' in data:
-#                 return {"message" : "FAILED give rating. There is no field like that."}
-#             else:
-#                 if 'rating' in data:
-#                     r.rating = data['rating']
-#                 db.session.commit()
-#                 return {'message': 'SUCCESFULLY give rating.'}, 201
-#     else:
-#         return {"message":"ACCESS DENIED !!! You can not give rating."}, 400
+@app.route('/rating', methods=['PUT'])
+def give_rating():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_customer1(identity)
+    allow2 = auth_customer2(identity)
+    r = Booking.query.filter_by(customer_id=allow2).filter_by(rating=None).first()
+    if allow1 == True:
+        if not r:
+            return {"message" : "You don't have a booking record that needs to be rated."}
+        else:
+            data = request.get_json()
+            if not 'rating' in data:
+                return {"message" : "FAILED give rating. There is no field like that."}
+            else:
+                if 'rating' in data:
+                    r.rating = data['rating']
+                db.session.commit()
+                return {'message': 'SUCCESFULLY give rating.'}, 201
+    else:
+        return {"message":"ACCESS DENIED !!! You can not give rating."}, 400
   
-# # --------------- Most Popular Hotel --------------- #
-# @app.route('/tophotel', methods=['GET'])
-# def top_hotel():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_customer1(identity)
-#     if allow1 == True or allow2 == True:
-#         result = db.engine.execute(f'''SELECT hotel_id, hotel_name, COUNT(hotel_id) FROM booking GROUP BY hotel_id, hotel_name ORDER BY count DESC LIMIT 3 ''')
-#         x = []
-#         for y in result:
-#             x.append({'hotel_id':y[0], 'hotel_name':y[1], 'total_booking':y[2]})
-#         return jsonify(x)
-#     else:
-#         return {
-#             "message":"ACCESS DENIED !!! You can not see top hotels."
-#         }
+# --------------- Most Popular Hotel --------------- #
+@app.route('/tophotel', methods=['GET'])
+def top_hotel():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_customer1(identity)
+    if allow1 == True or allow2 == True:
+        result = db.engine.execute(f'''SELECT hotel_id, COUNT(hotel_id) FROM booking GROUP BY hotel_id ORDER BY count DESC LIMIT 3 ''')
+        x = []
+        for y in result:
+            x.append({'hotel_id':y[0], 'total_booking':y[1]})
+        return jsonify(x)
+    else:
+        return {
+            "message":"ACCESS DENIED !!! You can not see top hotels."
+        }
 
-# # --------------- Most Hotels Rating Score --------------- #
-# @app.route('/toprating', methods=['GET'])
-# def top_rating():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_customer1(identity)
-#     if allow1 == True or allow2 == True:
-#         result = db.engine.execute(f'''SELECT hotel_id,hotel_name,AVG(rating)::numeric(10,2) FROM booking WHERE rating is not NULL group by hotel_id,hotel_name order by AVG DESC LIMIT 3''')
-#         x = []
-#         for y in result:
-#             x.append({'hotel_id':y[0], 'hotel_name':y[1], 'average_rating':y[2]})
-#         return jsonify(x)
-#     else:
-#         return {
-#             "message":"ACCESS DENIED !!! You can not see top rating Hotels."
-#         }
+# --------------- Most Hotels Rating Score --------------- #
+@app.route('/toprating', methods=['GET'])
+def top_rating():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_customer1(identity)
+    if allow1 == True or allow2 == True:
+        result = db.engine.execute(f'''SELECT hotel_id,AVG(rating)::numeric(10,2) FROM booking WHERE rating is not NULL group by hotel_id order by AVG DESC LIMIT 3''')
+        x = []
+        for y in result:
+            x.append({'hotel_id':y[0], 'average_rating':y[1]})
+        return jsonify(x)
+    else:
+        return {
+            "message":"ACCESS DENIED !!! You can not see top rating Hotels."
+        }
 
-# # --------------- Top Users --------------- #
-# @app.route('/topuser', methods=['GET'])
-# def top_user():
-#     identity = request.headers.get('Authorization')
-#     allow1 = auth_hotel1(identity)
-#     allow2 = auth_customer1(identity)
-#     if allow1 == True or allow2 == True:
-#         result = db.engine.execute(f'''SELECT customer.id,name,COUNT(customer.id) FROM customer INNER JOIN booking ON booking.customer_id=customer.id GROUP BY customer.id,name ORDER BY COUNT DESC LIMIT 3;''')
-#         x = []
-#         for y in result:
-#             x.append({'customer_id':y[0], 'customer_name':y[1], 'number_of_booking':y[2]})
-#         return jsonify(x)
-#     else:
-#         return {
-#             "message":"ACCESS DENIED !!! You can not see top users."
-#         }
+# --------------- Top Users --------------- #
+@app.route('/topuser', methods=['GET'])
+def top_user():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_hotel1(identity)
+    allow2 = auth_customer1(identity)
+    if allow1 == True or allow2 == True:
+        result = db.engine.execute(f'''SELECT customer.id,name,COUNT(customer.id) FROM customer INNER JOIN booking ON booking.customer_id=customer.id GROUP BY customer.id,name ORDER BY COUNT DESC LIMIT 3;''')
+        x = []
+        for y in result:
+            x.append({'customer_id':y[0], 'customer_name':y[1], 'number_of_booking':y[2]})
+        return jsonify(x)
+    else:
+        return {
+            "message":"ACCESS DENIED !!! You can not see top users."
+        }
 
 # # --------------- Searching Hotels --------------- #
 # @app.route('/searching', methods=['GET'])
