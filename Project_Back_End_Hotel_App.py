@@ -25,6 +25,7 @@ class Hotel(db.Model):
     city = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
     phone = db.Column(db.String, nullable=False, unique=True)
+    booking_hotel = db.relationship('Booking', backref='hotel_rel')
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -33,6 +34,7 @@ class Customer(db.Model):
     name = db.Column(db.String)
     phone = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, nullable=False, unique=True)
+    booking_customer = db.relationship('Booking', backref='customer_rel')
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
@@ -491,71 +493,30 @@ def top_user():
             "message":"ACCESS DENIED !!! You can not see top users."
         }
 
-# # --------------- Searching Hotels --------------- #
-# @app.route('/searching', methods=['GET'])
-# def search_hotel():
-#     data = request.get_json()
-#     if data['checkin'] <= data['checkout']:
-#         k = db.engine.execute(f'''
-#             select COALESCE((su.stock - sum(xx.superior)),0) as avail_superior, COALESCE((de.stock - sum(xx.deluxe)),0) as avail_deluxe, COALESCE((st.stock - sum(xx.standard)),0) as avail_standard, city, address, name, su.stock as cap_su, de.stock as cap_de, st.stock as cap_st, ho.id as ident from booking as xx join superior as su on su.hotel_id = xx.hotel_id join deluxe as de on de.hotel_id = xx.hotel_id join standard as st on st.hotel_id = xx.hotel_id join hotel as ho on ho.id = xx.hotel_id where (xx.checkin, xx.checkout) overlaps ('{data['checkin']}'::date, '{data['checkout']}'::date) and xx.hotel_id in (select id from hotel) and ho.city ilike '%%{data['city']}%%' group by su.stock, de.stock, st.stock, city, address, name, ident
-#         ''')
+# --------------- Searching Hotels --------------- #
+@app.route('/searching', methods=['GET'])
+def search_hotel():
+    data = request.get_json()
+    if data['checkin'] < data['checkout']:
+        k = db.engine.execute(f'''
+            select hotel.id as hotel_id,coalesce(avail_superior,5) as avail_sup,coalesce(avail_deluxe,5) as avail_del,coalesce(avail_standard,5) as avail_stan,hotel.name,hotel.city,hotel.address from hotel left outer join (select COALESCE((ho.superior_capacity - sum(bb.superior)),0) as avail_superior,
+            COALESCE((ho.deluxe_capacity - sum(bb.deluxe)),0) as avail_deluxe, COALESCE((ho.standard_capacity - sum(bb.standard)),0) as avail_standard, city, address, name, ho.superior_capacity as cap_su,ho.deluxe_capacity as cap_de,ho.standard_capacity as cap_st, ho.id as idhotel from booking as bb join hotel as ho on ho.id = bb.hotel_id where (bb.checkin, bb.checkout) overlaps ('{data['checkin']}'::date, '{data['checkout']}'::date) and bb.hotel_id in (select id from hotel) group by ho.superior_capacity, ho.deluxe_capacity, ho.standard_capacity, city, address, name, idhotel) as virtual on virtual.idhotel=hotel.id where hotel.city ILIKE '%%{data['city']}%%' order by id;
+        ''')
 
-#         x = []
-#         for i in k:
-#             x.append({
-#                     "hotel_name": i[5],
-#                     "superior_stock": i[0],
-#                     "deluxe_stock": i[1],
-#                     "standard_stock": i[2],
-#                     "city": i[3],
-#                     "address": i[4]
-#                 })
-#         if len(x) != 0:
-#             return {"Available_Hotels_and_its_stocks" : [x, another_result()]}
-#         else:
-#             return {"Available_Hotels_and_its_stocks" : initial_condition()}
-#     else:
-#         return {"message" : "Please enter the dates correctly."}
-
-# def initial_condition():
-#     data = request.get_json()
-#     x = []
-#     m = db.engine.execute(f''' select id from hotel where city ilike '%%{data['city']}%%' ''')
-#     for j in m:
-#         x.append({
-#                     "hotel_name": Hotel.query.filter_by(id=j[0]).first().name,
-#                     "superior_stock": Superior.query.filter_by(hotel_id=j[0]).first().stock,
-#                     "deluxe_stock": Deluxe.query.filter_by(hotel_id=j[0]).first().stock,
-#                     "standard_stock": Standard.query.filter_by(hotel_id=j[0]).first().stock,
-#                     "city": Hotel.query.filter_by(id=j[0]).first().city,
-#                     "address": Hotel.query.filter_by(id=j[0]).first().address
-#                 })
-#     return x
-
-# def another_result():
-#     data = request.get_json()
-#     k = db.engine.execute(f'''
-#         select COALESCE((su.stock - sum(xx.superior)),0) as avail_superior, COALESCE((de.stock - sum(xx.deluxe)),0) as avail_deluxe, COALESCE((st.stock - sum(xx.standard)),0) as avail_standard, city, address, name, su.stock as cap_su, de.stock as cap_de, st.stock as cap_st, ho.id as ident from booking as xx join superior as su on su.hotel_id = xx.hotel_id join deluxe as de on de.hotel_id = xx.hotel_id join standard as st on st.hotel_id = xx.hotel_id join hotel as ho on ho.id = xx.hotel_id where (xx.checkin, xx.checkout) overlaps ('{data['checkin']}'::date, '{data['checkout']}'::date) and xx.hotel_id in (select id from hotel) group by su.stock, de.stock, st.stock, city, address, name, ident
-#     ''')
-#     m = db.engine.execute(f''' select id from hotel where city ilike '%%{data['city']}%%' ''')
-#     x = []
-#     y = []
-#     z = []
-#     for a in m:
-#         z.append(a[0])
-#     for i in k:
-#         y.append(i[9])
-#     for c in z:
-#         if c not in y:
-#             x.append({
-#                 "hotel_name": Hotel.query.filter_by(id=c).first().name,
-#                 "superior_stock": Superior.query.filter_by(hotel_id=c).first().stock,
-#                 "deluxe_stock": Deluxe.query.filter_by(hotel_id=c).first().stock,
-#                 "standard_stock": Standard.query.filter_by(hotel_id=c).first().stock,
-#                 "city": Hotel.query.filter_by(id=c).first().city,
-#                 "address": Hotel.query.filter_by(id=c).first().address
-#             })
-#     return x
+        x = []
+        for i in k:
+            x.append({
+                    "_hotel_id": i[0],
+                    "_hotel_name": i[4],
+                    "superior_stock": i[1],
+                    "deluxe_stock": i[2],
+                    "standard_stock": i[3],
+                    "city": i[5],
+                    "address": i[6]
+                })
+        return jsonify(x)
+    else:
+        return {"message" : "Please enter the dates correctly."}
      
 if __name__ == '__main__':
 	app.run()
