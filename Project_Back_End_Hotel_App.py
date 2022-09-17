@@ -341,23 +341,28 @@ def create_booking():
     if allow == True:
         c_id = auth_customer2(identity)
         data = request.get_json()
+        k = db.engine.execute(f'''
+            select hotel.id as hotel_id,coalesce(avail_superior,5) as avail_sup,coalesce(avail_deluxe,5) as avail_del,coalesce(avail_standard,5) as avail_stan,hotel.name,hotel.city,hotel.address from hotel left outer join (select COALESCE((ho.superior_capacity - sum(bb.superior)),0) as avail_superior,
+            COALESCE((ho.deluxe_capacity - sum(bb.deluxe)),0) as avail_deluxe, COALESCE((ho.standard_capacity - sum(bb.standard)),0) as avail_standard, city, address, name, ho.superior_capacity as cap_su,ho.deluxe_capacity as cap_de,ho.standard_capacity as cap_st, ho.id as idhotel from booking as bb join hotel as ho on ho.id = bb.hotel_id where (bb.checkin, bb.checkout) overlaps ('{data['check_in_date']}'::date, '{data['check_out_date']}'::date) and bb.hotel_id in (select id from hotel) group by ho.superior_capacity, ho.deluxe_capacity, ho.standard_capacity, city, address, name, idhotel) as virtual on virtual.idhotel=hotel.id where hotel.id = {data['hotel_id']};
+        ''')
         h = Hotel.query.filter_by(id=data['hotel_id']).first()
-        if (h.superior_capacity >= data['amount_of_superior_room'] and h.deluxe_capacity >= data['amount_of_deluxe_room'] and h.standard_capacity >= data['amount_of_standard_room']) and (data['amount_of_superior_room'] >= 0 and data['amount_of_deluxe_room'] >=0 and data['amount_of_standard_room'] >= 0):
-            b = Booking(
-                    checkin = data['check_in_date'],
-                    checkout = data['check_out_date'],
-                    superior = data['amount_of_superior_room'],
-                    deluxe = data['amount_of_deluxe_room'],
-                    standard = data['amount_of_standard_room'],
-                    total_price = (data['amount_of_superior_room']*h.superior_price) + (data['amount_of_deluxe_room']*h.deluxe_price) + (data['amount_of_standard_room']*h.standard_price),
-                    hotel_id = data['hotel_id'],
-                    customer_id = c_id,
-                    )
-            db.session.add(b)
-            db.session.commit()
-            return {"message" : "SUCCESSFULLY Booking a hotel."}
-        else:
-            return {"message" : "The amount of rooms booked cannot exceed stock and must be positive integer number."}
+        for i in k:
+            if (0 <= data['amount_of_superior_room'] <= i[1]) and (0 <= data['amount_of_deluxe_room'] <= i[2]) and (0 <= data['amount_of_standard_room'] <= i[3]) and (data['check_in_date'] < data['check_out_date']):
+                b = Booking(
+                        checkin = data['check_in_date'],
+                        checkout = data['check_out_date'],
+                        superior = data['amount_of_superior_room'],
+                        deluxe = data['amount_of_deluxe_room'],
+                        standard = data['amount_of_standard_room'],
+                        total_price = (data['amount_of_superior_room']*h.superior_price) + (data['amount_of_deluxe_room']*h.deluxe_price) + (data['amount_of_standard_room']*h.standard_price),
+                        hotel_id = data['hotel_id'],
+                        customer_id = c_id,
+                        )
+                db.session.add(b)
+                db.session.commit()
+                return {"message" : "SUCCESSFULLY Booking a hotel."}
+            else:
+                return {"message" : "Please check the date and the amount of its rooms. The amount of rooms booked cannot exceed stock and must be positive integer number."}
     else:
         return {"message" : "FAILED Booking a hotel. Please check username and password."}
 
