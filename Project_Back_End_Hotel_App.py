@@ -6,6 +6,7 @@ from datetime import date, datetime, time
 app = Flask(__name__)
 db = SQLAlchemy(app)
 
+# app.config['SECRET_KEY'] = 'secret'
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:12345678@localhost:5432/HOTEL?sslmode=disable'
 
 class Hotel(db.Model):
