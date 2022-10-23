@@ -243,7 +243,7 @@ def delete_hotel():
     else:
         return {"message":"ACCESS DENIED !!! You can not delete Hotel."}, 400
 
-# --------------- Customer --------------- #
+# --------------- New Customer or Sign Up c --------------- #
 @app.route('/customer', methods=['POST'])
 def create_customer():
     data = request.get_json()
@@ -259,9 +259,9 @@ def create_customer():
             )
         db.session.add(c)
         db.session.commit()
-        return {"message" : "SUCCESSFULLY create a new Customer."}
+        return {"message" : "SUCCESSFULLY register."}
     else:
-        return {"message" : "FAILED to create Customer. The username had been taken."}
+        return {"message" : "FAILED to register. The username had been taken."}
 
 @app.route('/customer', methods=['GET'])
 def get_customer():
@@ -525,3 +525,18 @@ def search_hotel():
      
 if __name__ == '__main__':
 	app.run()
+
+#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*
+from flask_cors import CORS, cross_origin
+
+CORS(app, supports_credentials=True) 
+# --------------- Login --------------- #
+@app.route('/login', methods=['POST'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'], supports_credentials=True)
+def login():
+    identity = request.headers.get('Authorization')
+    allow1 = auth_customer1(identity)
+    if allow1 == True:
+        return "True bro"
+    else:
+        return "False bro"
