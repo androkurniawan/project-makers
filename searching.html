@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Searching</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <Style>
+        .main-nav{
+            background-color: #003566;
+        }
+        .main-nav .navbar-nav a.nav-link{
+            color: white;
+            font-weight: 600;
+        }
+        .main-nav .navbar-nav .nav-link.active, .main-nav .navbar-nav
+        .nav-link:hover {
+            color: #ffc300;
+        }
+        .searching h2 span{
+            color:#ffc300
+        }
+        .main-biru {
+            background-color: #003566;
+            color:white;
+        }
+        .navbar.scrolled {
+            background-color: white;
+            transition: background-color 0.75s ease;
+            box-shadow: 0px -10px 30px #666;
+        }
+        .navbar.scrolled a.nav-link {
+            color: #666;
+        }
+        /* Horizontal Line */
+        .divider {								/* minor cosmetics */
+            display: table; 
+            font-size: 24px; 
+            text-align: center; 
+            width: 75%; 						/* divider width */
+            margin: 40px auto;					/* spacing above/below */
+        }
+        .divider span { display: table-cell; position: relative; }
+        .divider span:first-child, .divider span:last-child {
+            width: 50%;
+            top: 19px;							/* adjust vertical align */
+            -moz-background-size: 100% 2px; 	/* line width */
+            background-size: 100% 2px; 			/* line width */
+            background-position: 0 0, 0 100%;
+            background-repeat: no-repeat;
+        }
+        .divider span:first-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(#000));
+            background-image: -webkit-linear-gradient(180deg, transparent, #000);
+            background-image: -moz-linear-gradient(180deg, transparent, #000);
+            background-image: -o-linear-gradient(180deg, transparent, #000);
+            background-image: linear-gradient(90deg, transparent, #000);
+        }
+        .divider span:nth-child(2) {
+            color: #000; padding: 0px 5px; width: auto; white-space: nowrap;
+        }
+        .divider span:last-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(transparent));
+            background-image: -webkit-linear-gradient(180deg, #000, transparent);
+            background-image: -moz-linear-gradient(180deg, #000, transparent);
+            background-image: -o-linear-gradient(180deg, #000, transparent);
+            background-image: linear-gradient(90deg, #000, transparent);
+        }
+
+    </Style>
+    <link rel="shortcut icon" href="assets/img/oracle.svg" type="image/x-icon">
+</head>
+
+<body>
+
+<header class="navbar sticky-top navbar-dark navbar-expand-lg main-nav">
+    <div class="container">
+        <a class="navbar-brand" style="cursor: pointer;" onclick="getCookie()">
+            <img src="/Hotel App/assets/img/oracle.png" width="160" height="20">
+        </a>
+      
+        <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto py-3">
+            <li class="nav-item">
+            <a class="nav-link active px-3" aria-current="page" href="#">Searching</a>
+            </li>
+            <!-- <li class="nav-item">
+            <a class="nav-link px-3" href="#">About Us</a>
+            </li> -->
+            <li class="nav-item">
+            <a class="nav-link px-3" href="login.html">Register|Login</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</header>
+
+
+
+<section id="horizontalLine" class="mb-0">
+    <div class="divider"><span></span><span>Searching Hotels</span><span></span></div>
+</section>
+
+<div class="text-center card mb-5" style="background-color:white;">
+    <div class="card-header">
+      <h4>Hotel with<span id="city"></span>with Checkin date<span id="checkin"></span><span>and Checkout date</span> <span id="checkout"></span></h4>
+    </div>
+</div>
+
+<div id="menu-parent">
+<div class="card container mb-5 bg-light offset-lg-2 col-lg-8">
+    <div class="row d-flex">
+        <div class="col-md-4 align-self-center">
+            <div class="align-self-center">
+            <img src="assets/img/cari1.png" class="d-block w-100">
+            </div>
+        </div>
+
+        <div class="col-md-4 py-3">
+            <h4 id="hotelName"></h4>
+            <h4 id="hotelCity"></h4>
+            <h4 id="hotelAddress"></h4>
+        </div>
+        
+        <div class="col-md-4 py-3">
+            <h4 id="supPrice"></h4>
+            <h4 id="delPrice"></h4>
+            <h4 id="standPrice"></h4>
+        </div>
+        
+    </div>
+</div>
+</div>
+
+<footer class="bg-light text-center text-lg-start">
+    <div class="text-center p-5" style="background-color:#001d3d;color: white;">
+        © 2022 Copyright: Oracle
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script src="assets/js/jquery-3.6.1.min.js"></script>
+<script>
+    // When scrolling, navbar change the background
+    $(function(){
+    $(document).scroll(function(){ 
+        var $nav = $(".navbar");
+        if ($(this).scrollTop() > $nav.height()) {
+            $nav.addClass("scrolled");
+            $nav.removeClass("navbar-dark");
+            $nav.addClass("navbar-light");
+        } else {
+            $nav.removeClass("scrolled");
+            $nav.addClass("navbar-dark");
+            $nav.removeClass("navbar-light");
+        }
+        });
+    })
+</script>
+<script>
+    let x = localStorage.getItem("city");
+    let y = localStorage.getItem("checkin");
+    let z = localStorage.getItem("checkout");
+    document.getElementById("city").innerHTML = ` city contain term "${x}" `;
+    document.getElementById("checkin").innerHTML = ` ${y} `;
+    document.getElementById("checkout").innerHTML = ` ${z} `;
+
+    function searchHotel(){
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+        "city": x,
+        "checkin": y,
+        "checkout": z
+        });
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:5000/searching", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            let text = "";
+            result.forEach(myFunction);
+            document.getElementById("menu-parent").innerHTML = text;
+
+            function myFunction(item){
+                text +=
+                `<div class="card container mb-5 bg-light offset-lg-2 col-lg-8">
+                <div class=" row d-flex">
+                    <div class="col-md-4 align-self-center">
+                        <div class="align-self-center">
+                        <img src="assets/img/cari${item._hotel_id}.png" class="d-block w-100" alt="Hotel with id ${item._hotel_id}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 py-3 align-self-center">
+                        <h4 id="hotelName">${item._hotel_name}</h4>
+                        <h4 id="hotelCity">${item.city}</h4>
+                        <h4 id="hotelAddress">${item.address}</h4>
+                    </div>
+                    
+                    <div class="col-md-4 py-3 align-self-center">
+                        <h4 id="supPrice">Superior price: ${item.superior_price}</h4>
+                        <h4 id="delPrice">Deluxe price: ${item.deluxe_price}</h4>
+                        <h4 id="standPrice">Standard price: ${item.standard_price}</h4>
+                        <button style="background-color:#003566;color:white;" type="button" class="btn" onclick="setId(${item._hotel_id})">Booking Now</button>
+
+                    </div>
+                </div>
+                </div>`
+            }
+        })
+        .catch(error => {
+            console.log('error', error)
+            alert("Checkin date must be before Checkout date!")
+            window.location.href = "index.html"
+        });
+        }
+    searchHotel();
+
+    function setId(x, y){
+        localStorage.setItem("idHotelClick", x);
+        localStorage.setItem("cityHotelClick", y)
+        window.location.href = "booking.html";
+    }
+</script>
+<script>
+function getCookie(){
+    let cookies = document.cookie
+    let x = cookies.split("=")
+    let y = x[1]
+    if(y == null) {
+        window.location.href = "index.html"
+    } else {
+        customerOrHotel();
+    }
+}
+    
+function customerOrHotel() {
+    let token = document.cookie;
+    let splitToken = token.split(".");
+    let user = JSON.parse(atob(splitToken[1]));
+    let usernames = user["user"];
+    let passwords = user["passkey"];
+
+        let usernameOrEmail = usernames;
+        let password = passwords;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(usernameOrEmail + ":" + password));
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+        
+        fetch("http://127.0.0.1:5000/login", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+            if (result.message === "success" && result.user === "customer") {
+                window.location.href = "home-customer.html";
+            } else if (result.message === "success" && result.user === "hotel"){
+                window.location.href = "home-hotel.html"
+            }
+            })
+            .catch((error) => console.log(error));
+    } 
+
+</script>
+</body>
+
+</html>

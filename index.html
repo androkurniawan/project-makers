@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Oracle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <Style>
+        .main-nav{
+            background-color: #003566;
+        }
+        .main-nav .navbar-nav a.nav-link{
+            color: white;
+            font-weight: 600;
+        }
+        .main-nav .navbar-nav .nav-link.active, .main-nav .navbar-nav
+        .nav-link:hover {
+            color: #ffc300;
+        }
+        .searching h2 span{
+            color:#ffc300
+        }
+        .main-biru {
+            background-color: #003566;
+            color:white;
+        }
+        .navbar.scrolled {
+            background-color: white;
+            transition: background-color 0.75s ease;
+            box-shadow: 0px -10px 30px #666;
+        }
+        .navbar.scrolled a.nav-link {
+            color: #666;
+        }
+        /* Horizontal Line */
+        .divider {								/* minor cosmetics */
+            display: table; 
+            font-size: 24px; 
+            text-align: center; 
+            width: 75%; 						/* divider width */
+            margin: 40px auto;					/* spacing above/below */
+        }
+        .divider span { display: table-cell; position: relative; }
+        .divider span:first-child, .divider span:last-child {
+            width: 50%;
+            top: 19px;							/* adjust vertical align */
+            -moz-background-size: 100% 2px; 	/* line width */
+            background-size: 100% 2px; 			/* line width */
+            background-position: 0 0, 0 100%;
+            background-repeat: no-repeat;
+        }
+        .divider span:first-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(#000));
+            background-image: -webkit-linear-gradient(180deg, transparent, #000);
+            background-image: -moz-linear-gradient(180deg, transparent, #000);
+            background-image: -o-linear-gradient(180deg, transparent, #000);
+            background-image: linear-gradient(90deg, transparent, #000);
+        }
+        .divider span:nth-child(2) {
+            color: #000; padding: 0px 5px; width: auto; white-space: nowrap;
+        }
+        .divider span:last-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(transparent));
+            background-image: -webkit-linear-gradient(180deg, #000, transparent);
+            background-image: -moz-linear-gradient(180deg, #000, transparent);
+            background-image: -o-linear-gradient(180deg, #000, transparent);
+            background-image: linear-gradient(90deg, #000, transparent);
+        }
+    </Style>
+    <link rel="shortcut icon" href="assets/img/oracle.svg" type="image/x-icon">
+</head>
+
+<body onload="getCookie()">
+
+<header class="navbar sticky-top navbar-dark navbar-expand-lg main-nav">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="/Hotel App/assets/img/oracle.png" alt="Bootstrap" width="160" height="20">
+        </a>
+      
+        <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto py-3">
+            <li class="nav-item">
+            <a class="nav-link active px-3" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link px-3" href="register-hotel.html">Join Us</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link px-3" href="login.html">Register|Login</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</header>
+
+<section class="searchingHotel">
+    <div class="container py-5">
+    <div class="row">
+
+        <div class="col-lg-6 align-self-center">
+            <div>
+                <!-- <div><h2>Find the <span>best</span> hotel for you.</h2></div> -->
+
+                <form class="row g-3" id="searchingForm" onsubmit="searching();return false">
+                    <div><h2>Find the <span style="color:#ffc300;">best</span> hotel for you.</h2></div>
+                    
+                    <label for="city" class="form-label mb-0">Destination City</label>
+                    <div class="col-md-8 input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>                        
+                        <input id="city" name="city" type="text" class="form-control input-field" placeholder="Enter a city" aria-describedby="emailHelp">
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="checkin" class="form-label">Check-in</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <span class="bi-person"><i class="fa-regular fa-calendar-check"></i></span>
+                            </span>
+                            <input type="date" class="form-control" id="checkin" name="checkin">
+                        </div>       
+                    </div>
+
+                    <div class="mb-3 col-md-6">
+                        <label for="checkout" class="form-label">Check-out</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <span class="bi-person"><i class="fa-solid fa-calendar-check"></i></span>
+                            </span>
+                            <input type="date" class="form-control" id="checkout" name="checkout" value="datetimenow">
+                        </div>       
+                    </div>
+                    
+                    <button type="submit" class="btn btn-warning">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
+
+        <div class="px-4 py-5">
+            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="3000">
+                    <img src="assets/img/hotel1.webp" width="250" height="400" class="d-block w-100" alt="">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 style="color:#ffd60a;"><span style="background-color:#001d3d;">L Hotel, Padang</span></h5>
+                        <!-- <p>Some representative placeholder content for the first slide.</p>  -->
+                    </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="3000">
+                    <img src="assets/img/hotel2.jpg" width="250" height="400" class="d-block w-100" alt="">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 style="color:#ffd60a;"><span style="background-color:#001d3d;">Pesona Hotel, Pekan Baru</span></h5>
+                        <!-- <p>Some representative placeholder content for the second slide.</p>  -->
+                    </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="3000">
+                    <img src="assets/img/hotel3.jpg" width="250" height="400" class="d-block w-100" alt="">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 style="color:#ffd60a;"><span style="background-color:#001d3d;">In Hotel, Bandung</span></h5>
+                        <!-- <p>Some representative placeholder content for the third slide.</p> -->
+                    </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<section id="whyChooseOracle">
+    <div class="container py-3 text-center">
+        <h2>Why Oracle</h2>
+        <diV class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="py-3" width="200em" src="assets/img/whyoracle1.png">
+                        <h4>Ease of Payment</h4>
+                        <p>Choose your preferred payment method (transfers, credit cards, self-service payments, internet banking, and installments).</p>
+                    </div>
+                    <div class="col-md-3">
+                        <img class="py-3" width="200em" src="assets/img/whyoracle2.png">
+                        <h4>Discounts & Promos</h4>
+                        <p>Enjoy special prices for Oracle members and also get a variety of other interesting promos.</p>
+                    </div>
+                    <div class="col-md-3">
+                        <img class="py-3" width="200em" src="assets/img/whyoracle3.png">
+                        <h4>OraclePoint</h4>
+                        <p>Collect OraclePoin from your transactions and use it as a discount on the next transaction.</p>
+                    </div>
+                    <div class="col-md-3">
+                        <img class="py-3" width="200em" src="assets/img/whyoracle4.png">
+                        <h4>Best Price Guarantee</h4>
+                        <p>Oracle guarantees you the best price when placing an order.</p>
+                    </div>
+                </div>
+            </div>
+        </diV>
+    </div>
+</section>
+
+<section id="review" class="main-biru">
+    <div class="container-fluid py-3 text-center">
+        <h2>Trusted by more than a million people</h2>
+        <p>Oracle is one of the best hotel reservation app</p>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3>99.99%</h3>
+                        <p>Satisfaction</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>20K</h3>
+                        <p>Users/day</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>36.000</h3>
+                        <p>Revervation/year</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="mostVisitHotel">
+    <div class="album py-5 bg-light">
+        <div class="container mb-4 text-center" id="titleMostVisitHotel">
+            <h2>Most Visited Hotels</h2>
+            <p>The hotel with the highest number of bookings. Could be one of your choices.</p>
+
+        </div>
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                
+                <div class="col">
+                  <div class="card shadow-sm">
+                    <img src="assets/img/mostVisit1.jpg" width="100%" height="300" class="d-block w-100" alt="">
+                    <div class="card-body">
+                        <h3 id="visitHotel1"></h3>
+                        <h4 id="cityHotel1"></h4>
+                        <p id="totalBooking1"></p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="card shadow-sm">
+                    <img src="assets/img/mostVisit2.jpg" width="100%" height="300" class="d-block w-100" alt="">
+                    <div class="card-body">
+                        <h3 id="visitHotel2"></h3>
+                        <h4 id="cityHotel2"></h4>
+                        <p id="totalBooking2"></p>                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class="card shadow-sm">
+                    <img src="assets/img/mostVisit3.webp" width="100%" height="300" class="d-block w-100" alt="">
+                    <div class="card-body">
+                            <h3 id="visitHotel3"></h3>
+                            <h4 id="cityHotel3"></h4>
+                            <p id="totalBooking3"></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                        </div>
+                        <!-- <small class="text-muted">9 mins</small> -->
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+        </div>
+    </div>
+</section>
+
+<section id="horizontalLine">
+    <div class="divider"><span></span><span>Top Users</span><span></span></div>
+</section>
+
+<section id="topUser" class="mb-5">
+    <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-10 col-xl-8 text-center">
+      </div>
+    </div>
+  
+    <div class="row text-center">
+      <div class="col-md-4 mb-5 mb-md-0">
+        <div class="d-flex justify-content-center mb-4">
+          <img src="assets/img/top1.jpg"
+            class="rounded-circle shadow-1-strong" width="150" height="150" />
+        </div>
+        <h5 id="top1Name" class="mb-3"></h5>
+        <h6 id="top1TotalBooking" class="text-primary mb-3"></h6>
+        <p class="px-xl-3">
+          <i class="fas fa-quote-left pe-2"></i>Words can't explain the kind of treatment I received from the management of Oracle. They are the best in the country.
+        </p>
+      </div>
+
+      <div class="col-md-4 mb-5 mb-md-0">
+        <div class="d-flex justify-content-center mb-4">
+          <img src="assets/img/top2.jpg"
+            class="rounded-circle shadow-1-strong" width="150" height="150" />
+        </div>
+        <h5 id="top2Name" class="mb-3"></h5>
+        <h6 id="top2TotalBooking" class="text-primary mb-3"></h6>
+        <p class="px-xl-3">
+          <i class="fas fa-quote-left pe-2"></i>Oracle makes you feel the best room quality that makes you feel the comfort of a home.
+        </p>
+      </div>
+
+      <div class="col-md-4 mb-0">
+        <div class="d-flex justify-content-center mb-4">
+          <img src="assets/img/top3.jpg"
+            class="rounded-circle shadow-1-strong" width="150" height="150" />
+        </div>
+        <h5 id="top3Name" class="mb-3"></h5>
+        <h6 id="top3TotalBooking" class="text-primary mb-3"></h6>
+        <p class="px-xl-3">
+          <i class="fas fa-quote-left pe-2"></i>My Family and I are very happy when using Oracle. They are by far the best in the universe.
+        </p>
+      </div>
+    </div>
+</div>
+</section>
+
+<section id="horizontalLine">
+    <div class="divider mb-0"><span></span><span>Highest Rated Hotels</span><span></span></div>
+    <div class="container text-center mb-5"><p>The hotel with the highest rating is always be a consideration.</p>
+    </div>
+
+    <main>
+        <div class="container bg-light card offset-md-1 mb-4">
+          <div class="row align-items-md-stretch">
+            <div class="col-md-3">
+              <div class="h-100 p-3 bg-light rounded-3">
+                <img src="assets/img/rating1.jpg" width="100%">
+              </div>
+            </div>
+            <div class="col-md-3 align-self-center">
+              <div>
+                <h2 id="rating1Hotel"></h2>
+                <h3 id="rating1City"></h3>
+                <h4 id="rating1Rating"></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container bg-light card offset-md-1 mb-4">
+            <div class="row align-items-md-stretch">
+                <div class="col-md-4"></div>
+              <div class="col-md-3 align-self-center">
+                <div>
+                  <h2 id="rating2Hotel"></h2>
+                  <h3 id="rating2City"></h3>
+                  <h4 id="rating2Rating"></h4>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="h-100 p-3 bg-light rounded-3">
+                  <img src="assets/img/rating2.jpg" width="100%">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="container bg-light card offset-md-1 mb-4">
+            <div class="row align-items-md-stretch">
+              <div class="col-md-3">
+                <div class="h-100 p-3 bg-light rounded-3">
+                  <img src="assets/img/rating3.jpg" width="100%">
+                </div>
+              </div>
+              <div class="col-md-3 align-self-center">
+                <div>
+                  <h2 id="rating3Hotel"></h2>
+                  <h3 id="rating3City"></h3>
+                  <h4 id="rating3Rating"></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+      </main>
+</section>
+
+<section>
+    <footer class="bg-light text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-5" style="background-color:#001d3d;color: white;">
+          © 2022 Copyright: Oracle
+        </div>
+        <!-- Copyright -->
+      </footer>
+</section>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script src="assets/js/jquery-3.6.1.min.js"></script>
+<script>
+    // When scrolling, navbar change the background
+    $(function(){
+    $(document).scroll(function(){ 
+        var $nav = $(".navbar");
+        if ($(this).scrollTop() > $nav.height()) {
+            $nav.addClass("scrolled");
+            $nav.removeClass("navbar-dark");
+            $nav.addClass("navbar-light");
+        } else {
+            $nav.removeClass("scrolled");
+            $nav.addClass("navbar-dark");
+            $nav.removeClass("navbar-light");
+        }
+        });
+    })
+</script>
+<script>
+
+    function searching(){
+        // let token = document.cookie;
+        // let splitToken = token.split(".");
+        // let user = JSON.parse(atob(splitToken[1]));
+        // let username = user["user"];
+        // let password = user["passkey"];
+
+        // let customer_email = document.getElementById("customer_email").value;
+        // let customer_name = document.getElementById("customer_name").value;
+        // let customer_phone = document.getElementById("customer_phone").value;
+
+        // var preRaw = {
+        //     "customer_email": customer_email,
+        //     "customer_name": customer_name,
+        //     "customer_phone": customer_phone
+        // }
+        // window.location.href = "searching.html"
+        // document.getElementById("searchingForm").addEventListener("click", function(event){event.preventDefault()});
+        const changeForm = document.querySelector("#searchingForm");
+        let changeData = new FormData(changeForm);
+        changeData = Object.fromEntries(changeData);
+
+        if (changeData.checkin === "" || changeData.checkout === ""){
+            // document.getElementById("searchingForm").addEventListener("click", function(event){event.preventDefault()});
+            alert("Checkin and Checkout date can't be empty.");
+        } else {
+            localStorage.setItem("city", changeData.city);
+            localStorage.setItem("checkin", changeData.checkin);
+            localStorage.setItem("checkout", changeData.checkout);
+            window.location.href = "searching.html";
+        }
+
+        
+    }
+</script>
+<script>
+function mostVisitHotel(){
+    var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+    };
+
+    fetch("http://127.0.0.1:5000/tophotel", requestOptions)
+    .then(response => response.json())
+    .then(x => {
+        document.getElementById("visitHotel1").innerHTML = x[0]["hotel_name"]
+        document.getElementById("cityHotel1").innerHTML = x[0]["hotel_city"]
+        document.getElementById("totalBooking1").innerHTML = `Total booking: ${x[0]["total_booking"]}`
+        document.getElementById("visitHotel2").innerHTML = x[1]["hotel_name"]
+        document.getElementById("cityHotel2").innerHTML = x[1]["hotel_city"]
+        document.getElementById("totalBooking2").innerHTML = `Total booking: ${x[1]["total_booking"]}`
+        document.getElementById("visitHotel3").innerHTML = x[2]["hotel_name"]
+        document.getElementById("cityHotel3").innerHTML = x[2]["hotel_city"]
+        document.getElementById("totalBooking3").innerHTML = `Total booking: ${x[2]["total_booking"]}`
+    })
+    .catch(error => console.log('error', error));
+}
+
+mostVisitHotel();
+
+function topUser(){
+    var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+    };
+    
+    fetch("http://127.0.0.1:5000/topuser", requestOptions)
+    .then(response => response.json())
+    .then(x => {
+        document.getElementById("top1Name").innerHTML = x[0]["customer_name"]
+        document.getElementById("top1TotalBooking").innerHTML = `Total booking: ${x[0]["number_of_booking"]}`
+        document.getElementById("top2Name").innerHTML = x[1]["customer_name"]
+        document.getElementById("top2TotalBooking").innerHTML = `Total booking: ${x[1]["number_of_booking"]}`
+        document.getElementById("top3Name").innerHTML = x[2]["customer_name"]
+        document.getElementById("top3TotalBooking").innerHTML = `Total booking: ${x[2]["number_of_booking"]}`
+    })
+    .catch(error => console.log('error', error));
+}
+
+topUser();
+
+function mostRating(){
+    var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+    };
+    
+    fetch("http://127.0.0.1:5000/toprating", requestOptions)
+    .then(response => response.json())
+    .then(x => {
+        document.getElementById("rating1Hotel").innerHTML = x[0]["hotel_name"]
+        document.getElementById("rating1City").innerHTML = x[0]["city"]
+        document.getElementById("rating1Rating").innerHTML = `Rating score: ${x[0]["average_rating"]}`
+        document.getElementById("rating2Hotel").innerHTML = x[1]["hotel_name"]
+        document.getElementById("rating2City").innerHTML = x[1]["city"]
+        document.getElementById("rating2Rating").innerHTML = `Rating score: ${x[1]["average_rating"]}`
+        document.getElementById("rating3Hotel").innerHTML = x[2]["hotel_name"]
+        document.getElementById("rating3City").innerHTML = x[2]["city"]
+        document.getElementById("rating3Rating").innerHTML = `Rating score: ${x[2]["average_rating"]}`
+    })
+    .catch(error => console.log('error', error));
+}
+
+mostRating();
+</script>
+
+<script>
+    function getCookie(){
+    let cookies = document.cookie
+    let x = cookies.split("=")
+    let y = x[1]
+    if(y !== null) {
+        customerOrHotel();
+    }
+}
+    
+function customerOrHotel() {
+    let token = document.cookie;
+    let splitToken = token.split(".");
+    let user = JSON.parse(atob(splitToken[1]));
+    let usernames = user["user"];
+    let passwords = user["passkey"];
+
+    let usernameOrEmail = usernames;
+    let password = passwords;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Basic " + btoa(usernameOrEmail + ":" + password));
+
+    var raw = "";
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+    };
+    
+    fetch("http://127.0.0.1:5000/login", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+        if (result.message === "success" && result.user === "customer") {
+            window.location.href = "home-customer.html";
+        } else if (result.message === "success" && result.user === "hotel"){
+            window.location.href = "home-hotel.html"
+        }
+        })
+        .catch((error) => console.log(error));
+    }
+
+</script>
+</body>
+
+</html>

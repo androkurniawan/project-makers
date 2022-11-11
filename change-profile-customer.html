@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Profile</title>
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <style>
+     
+        body {
+            margin: 0;
+            /* background-color:wheat; */
+        }   
+        .main-nav{
+            background-color: #003566;
+        }
+        .main-nav .navbar-nav a.nav-link{
+            color: white;
+            font-weight: 600;
+        }
+        .main-nav .navbar-nav .nav-link.active, .main-nav .navbar-nav
+        .nav-link:hover {
+            color: #ffc300;
+        }
+        .searching h2 span{
+            color:#ffc300
+        }
+        .main-biru {
+            background-color: #003566;
+            color:white;
+        }
+        .navbar.scrolled {
+            background-color: white;
+            transition: background-color 0.75s ease;
+            box-shadow: 0px -10px 30px #666;
+        }
+        .navbar.scrolled a.nav-link {
+            color: #666;
+        }
+        /* Horizontal Line */
+        .divider {								/* minor cosmetics */
+            display: table; 
+            font-size: 24px; 
+            text-align: center; 
+            width: 75%; 						/* divider width */
+            margin: 40px auto;					/* spacing above/below */
+        }
+        .divider span { display: table-cell; position: relative; }
+        .divider span:first-child, .divider span:last-child {
+            width: 50%;
+            top: 19px;							/* adjust vertical align */
+            -moz-background-size: 100% 2px; 	/* line width */
+            background-size: 100% 2px; 			/* line width */
+            background-position: 0 0, 0 100%;
+            background-repeat: no-repeat;
+        }
+        .divider span:first-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(#000));
+            background-image: -webkit-linear-gradient(180deg, transparent, #000);
+            background-image: -moz-linear-gradient(180deg, transparent, #000);
+            background-image: -o-linear-gradient(180deg, transparent, #000);
+            background-image: linear-gradient(90deg, transparent, #000);
+        }
+        .divider span:nth-child(2) {
+            color: #000; padding: 0px 5px; width: auto; white-space: nowrap;
+        }
+        .divider span:last-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(transparent));
+            background-image: -webkit-linear-gradient(180deg, #000, transparent);
+            background-image: -moz-linear-gradient(180deg, #000, transparent);
+            background-image: -o-linear-gradient(180deg, #000, transparent);
+            background-image: linear-gradient(90deg, #000, transparent);
+        }
+    </style>
+        <link rel="shortcut icon" href="assets/img/oracle.svg" type="image/x-icon">
+
+</head>
+<body>
+    <header class="navbar sticky-top navbar-dark navbar-expand-lg main-nav">
+        <div class="container">
+            <a class="navbar-brand" href="home-customer.html">
+                <img src="/Hotel App/assets/img/oracle.png" alt="Bootstrap" width="160" height="20">
+            </a>
+          
+            <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto py-3">
+                <li class="nav-item">
+                <a class="nav-link px-3" aria-current="page" href="home-customer.html">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link px-3" href="mybooking.html">My Booking</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active px-3" href="#">Profile</a>
+                    </li>
+                <li class="nav-item">
+                    <!-- Example single danger button -->
+                    <div class="btn-group px-3">
+                        <button type="button" style="background-color: #ffd60a;border-radius: 25px;" id="dropdown" class="btn btn-md dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile-customer.html">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Setting</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" style="cursor: pointer;" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </div>
+    
+                <!-- <a class="nav-link px-3" href="login.html">Register|Login</a> -->
+                </li>
+            </ul>
+            </div>
+        </div>
+    </header>
+    <div id="background-image">
+    <div class="container" style="padding-top: 1.5em;"><p></p></div>
+
+    <div class="container text-center">
+        <h1><b>Change Profile</b></h1>
+        <label style="color:crimson">Username can't be changed</label>
+    </div>
+
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="offset-lg-3 col-lg-6">
+
+                <form id="changeForm" class="row g-3" onsubmit="change()">
+                    <span class="border border-success"></span>
+                    <div class="col-md-6">
+                    <label class="form-label">Username</label>
+                    <!-- <input id="username" type="text" class="form-control form-control-sm" placeholder="" autocomplete="off"> -->
+                    <div id="username" style="background-color:aquamarine;"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <label for="customer_name" class="form-label">Name</label>
+                    <input value="" name="customer_name" id="customer_name" type="text" class="form-control form-control-sm" autocomplete="off">
+                    </div>
+
+                    <div class="row g-3" >
+                    <span class="border border-success"></span>
+
+                    <span class="border border-success"></span>
+                    <div class="col-md-6">
+                    <label for="customer_email" class="form-label">Email</label>
+                    <input name="customer_email" value="" id="customer_email" type="text" class="form-control form-control-sm" placeholder="Your new email" autocomplete="off">
+                    </div>
+
+                    <div class="col-md-6">
+                    <label for="customer_phone" class="form-label">Phone</label>
+                    <input id="customer_phone" value="" name="customer_phone" type="text" class="form-control form-control-sm" placeholder="Your new phone number" autocomplete="off">
+                    </div>
+
+                    <span class="border border-success"></span>
+                    <!-- <div><a href="change-password.html">Change Password</a></div> -->
+                    <div class="col-12">
+                    <button id="save" type="submit" class="btn btn-danger w-100" onclick="change()">Save</button>
+                    <div style="padding-bottom: 1em;"></div>
+                    <button id="home" onclick="cancel()" type="submit" class="btn btn-secondary w-100" >Cancel</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<section>
+    <footer class="bg-light text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-5" style="background-color:#001d3d;color: white;">
+          © 2022 Copyright: Oracle
+        </div>
+        <!-- Copyright -->
+      </footer>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+<script>
+    function getProfil(){
+        let token = document.cookie;
+        let splitToken = token.split(".");
+        let user = JSON.parse(atob(splitToken[1]));
+        let username = user["user"];
+        let password = user["passkey"];
+        console.log(username, password)
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(username + ":" + password));
+        var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:5000/customer", requestOptions)
+        .then(response => response.json())
+        .then(x => {
+            document.getElementById("username").innerHTML = x.username;
+            document.getElementById("customer_name").value = x.customer_name;           
+            document.getElementById("customer_email").value = x.customer_email;
+            document.getElementById("customer_phone").value = x.customer_phone;
+        })
+        .catch(error => console.log('error', error));
+    }
+    getProfil()
+</script>
+
+<script>
+    function getCookie(){
+        let cookies = document.cookie;
+        let x = cookies.split("=");
+        let y = x[1];
+        if(y == null) {
+            window.location.href = "index.html";
+        }
+    }
+	getCookie()
+
+    function cancel(){
+        window.location.href = "profile-customer.html"
+    }
+
+    // document.getElementById("home").addEventListener("click", function(event){event.preventDefault()});
+    // document.getElementById("home").addEventListener("click", home)
+
+    // document.getElementById("save").addEventListener("click", function(event){event.preventDefault()});
+    // document.getElementById("save").addEventListener("click", change)
+
+    document.getElementById("changeForm").addEventListener("click", function(event){event.preventDefault()})
+
+    let token = document.cookie;
+    let splitToken = token.split(".");
+    let user = JSON.parse(atob(splitToken[1]));
+    let username = user["user"];
+
+    document.getElementById("username").innerHTML = username;
+
+    function change(){
+
+        let token = document.cookie;
+        let splitToken = token.split(".");
+        let user = JSON.parse(atob(splitToken[1]));
+        let username = user["user"];
+        let password = user["passkey"];
+
+        let customer_email = document.getElementById("customer_email").value;
+        let customer_name = document.getElementById("customer_name").value;
+        let customer_phone = document.getElementById("customer_phone").value;
+
+        var preRaw = {
+            "customer_email": customer_email,
+            "customer_name": customer_name,
+            "customer_phone": customer_phone
+        }
+
+        const changeForm = document.querySelector("#changeForm");
+        let changeData = new FormData(changeForm);
+        changeData = Object.fromEntries(changeData);
+    
+        for(let key in changeData){
+            let value = changeData[key];
+            let x = String(key)
+            if(value == ""){
+                delete preRaw[key];
+            }
+        }
+        
+        var raw = JSON.stringify(preRaw);
+        
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(username + ":" + password));
+        myHeaders.append("Content-Type", "application/json");
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:5000/customer", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            console.log(result)
+            alert("Your profile has been updated.")
+            window.location.href = "profile-customer.html"
+        })
+        .catch(error => {
+            console.log('error', error)
+            alert("Failed update profile.")
+        });
+    }
+
+</script>
+<script>
+    
+</script>
+<script src="assets/js/jquery-3.6.1.min.js"></script>
+<script>
+    // When scrolling, navbar change the background
+    $(function(){
+    $(document).scroll(function(){ 
+        var $nav = $(".navbar");
+        if ($(this).scrollTop() > $nav.height()) {
+            $nav.addClass("scrolled");
+            $nav.removeClass("navbar-dark");
+            $nav.addClass("navbar-light");
+        } else {
+            $nav.removeClass("scrolled");
+            $nav.addClass("navbar-dark");
+            $nav.removeClass("navbar-light");
+        }
+        });
+    })
+
+    function logout() {
+    if (confirm("Do you want to Logout?")) {
+        setCookie("username", "", -1);
+        location.href="index.html";
+        console.log("BERHASIL LOGOUT");
+    } else {
+        console.log("CANCELED.")
+    }
+}
+function dropdownItem(){
+        let token = document.cookie;
+        let splitToken = token.split(".");
+        let user = JSON.parse(atob(splitToken[1]));
+        let username = user["user"];
+        document.getElementById("dropdown").innerHTML = username
+    }
+    dropdownItem();
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
+        .pass_show{position: relative} 
+
+        .pass_show .ptxt { 
+        position: absolute; 
+        top: 50%; 
+        right: 10px;
+        z-index: 1; 
+        color: #f36c01; 
+        margin-top: -10px; 
+        cursor: pointer; 
+        transition: .3s ease all; 
+        }
+
+        .form-gap {
+            padding-top: 70px;
+        }
+
+        .pass_show .ptxt:hover{color: #333333;} 
+    </style>
+</head>
+<body onload="getCookie()">
+    <div class="form-gap"></div>
+    <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+          <div class="text-center"><div class="panel-heading"><h1 class="panel-title"><strong>Login into your Account</strong></h1></div></div>
+
+          <div class="panel-body">
+            <form action="#" class="form" role="form" autocomplete="off">
+
+                <label>Username</label>
+                <div class="form-group">
+                <input type="input" class="form-control" id="usernameOrEmail" placeholder="Enter Username">
+                </div>
+
+                <label>Password <a href="new-password-reset.html">(forgot password)</a></label>
+                <div class="form-group pass_show">
+                    <input id="password" type="password" value="" class="form-control" placeholder="Password">
+                </div>
+            
+                <button type="submit" id="login" class="btn btn-lg btn-primary btn-block">Login</button>
+
+                <div>
+                    <p style="margin-top: 1em;">If you don't have any account, register first.</p>
+                </div>
+
+                <div class="text-center">
+                <label><a href="register-customer.html">Register</a></label>
+                </div>
+
+            </form>
+          </div>
+        </div>
+        
+        </div>
+
+<script>
+
+    $(document).ready(function(){
+    $('.pass_show').append('<span class="ptxt">Show</span>');  
+    });
+    
+    $(document).on('click','.pass_show .ptxt', function(){ 
+    $(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
+    $(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
+    });
+
+    function setCookie(cName, cValue, expDays) {
+        let date = new Date();
+        date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
+        const expires = "expires=" + date.toUTCString();
+        document.cookie =
+            cName + "=" + cValue + "; " + expires + "; path=/; SameSite=None; secure";
+    }
+
+    document.getElementById("login").addEventListener("click", function(event){event.preventDefault()});
+    document.getElementById("login").addEventListener("click", login)
+
+    function login() {
+        let usernameOrEmail = document.getElementById("usernameOrEmail").value;
+        let password = document.getElementById("password").value;
+        // console.log(usernameOrEmail, password);
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(usernameOrEmail + ":" + password));
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+        
+        fetch("http://127.0.0.1:5000/login", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+            if (result.message === "success" && result.user === "customer") {
+                setCookie("username", result.token, 7);
+                window.location.href = "booking.html";
+            } else if (result.message === "success" && result.user === "hotel"){
+                setCookie("username", result.token, 7);
+                window.location.href = "home-hotel.html";
+            }
+            return alert("Login failed.");
+            })
+            .catch((error) => alert("Username or password incorrect."));
+    }
+
+</script>
+
+<script>
+    function getCookie(){
+        let cookies = document.cookie
+        let x = cookies.split("=")
+        let y = x[1]
+        if(y !== null) {
+            customerOrHotel();
+        }
+    }
+    
+    function customerOrHotel() {
+        let token = document.cookie;
+        let splitToken = token.split(".");
+        let user = JSON.parse(atob(splitToken[1]));
+        let usernames = user["user"];
+        let passwords = user["passkey"];
+ 
+        let usernameOrEmail = usernames;
+        let password = passwords;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(usernameOrEmail + ":" + password));
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+        
+        fetch("http://127.0.0.1:5000/login", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.message === "success" && result.user === "customer") {
+                    window.location.href = "booking.html";
+                } else if (result.message === "success" && result.user === "hotel"){
+                    window.location.href = "home-hotel.html"
+                }
+                }
+            )
+            .catch((error) => console.log(error));
+        }
+
+</script>
+
+</body>
+</html>

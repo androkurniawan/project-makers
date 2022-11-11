@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
+        .pass_show{position: relative} 
+
+        .pass_show .ptxt { 
+        position: absolute; 
+        top: 50%; 
+        right: 10px;
+        z-index: 1; 
+        color: #f36c01; 
+        margin-top: -10px; 
+        cursor: pointer; 
+        transition: .3s ease all; 
+        }
+
+        .form-gap {
+            padding-top: 70px;
+        }
+
+.pass_show .ptxt:hover{color: #333333;} 
+    </style>
+        <link rel="shortcut icon" href="assets/img/oracle.svg" type="image/x-icon">
+
+</head>
+<body>
+    <div class="form-gap"></div>
+    <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">
+          <div class="text-center"><div class="panel-heading"><h3 class="panel-title"><strong> Register New Account </strong></h3></div></div>
+          <div class="panel-body">
+            <form role="form" action="#" class="form" role="form" autocomplete="off">
+
+                <label>Name</label>
+                <div class="form-group">
+                <input type="input" class="form-control" id="name" placeholder="Enter your name">
+                </div>
+
+                <label>Username</label>
+                <div class="form-group">
+                <input type="input" class="form-control" id="username" placeholder="Username">
+                </div>
+
+                <label>Password</label>
+                <div class="form-group pass_show">
+                    <input id="password" type="password" value="" class="form-control" placeholder="Password">
+                </div>
+
+                <label>Confirm Password</label>
+                <div class="form-group pass_show">
+                    <input id="confirm-password" type="password" value="" class="form-control" placeholder="Enter the password again">
+                </div>
+
+                <label>Email</label>
+                <div class="form-group">
+                <input type="text" class="form-control" id="email" placeholder="Enter your email">
+                </div>
+
+                <label>Phone</label>
+                <div class="form-group">
+                <input class="form-control" id="phone" placeholder="Your phone number">
+                </div>
+
+                <button id="register" type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
+
+            </form>
+          </div>
+        </div>
+        
+        </div>
+        
+<script>
+    document.getElementById("register").addEventListener("click", function(event){event.preventDefault()});
+    document.getElementById("register").addEventListener("click", register)
+
+    $(document).ready(function(){
+    $('.pass_show').append('<span class="ptxt">Show</span>');  
+    });
+    
+    $(document).on('click','.pass_show .ptxt', function(){ 
+    $(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
+    $(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
+    });
+
+    function register() {
+        let names = document.getElementById("name").value;
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+        let passConfirm = document.getElementById("confirm-password").value;
+        let email = document.getElementById("email").value;
+        let phone = document.getElementById("phone").value;
+
+        var myHeaders = new Headers();
+        // myHeaders.append("Authorization", "Basic YW5kcm86MTIzNDU2Nzg=");
+        myHeaders.append("Authorization", "Basic " + btoa(username + ":" + password));
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            customer_name: names,
+            username: username,
+            password: password,
+            customer_email: email,
+            customer_phone: phone,
+        });
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+        };
+
+        if (
+            names == "" ||
+            username == "" ||
+            password == "" ||
+            passConfirm == "" ||
+            email == "" ||
+            phone == ""
+        ) {
+            // A field can not be empty
+            return alert("A field can not be empty.");
+        } 
+        
+        else {
+            fetch("http://127.0.0.1:5000/customer", requestOptions)
+            .then((response) => response.text())
+            .then((data) => {
+                if (data !== "False"){
+                    alert("Success create an account. Please login to continue.")
+                    window.location.href = "login.html"
+                } else {
+                    alert("Failed create a new account because the username was taken. Try again with another username.")
+                }                
+            })
+            .catch(error => console.log('error', error)
+            );
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Hotel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <style>
+        .main-nav{
+            background-color: #003566;
+        }
+        .main-nav .navbar-nav a.nav-link{
+            color: white;
+            font-weight: 600;
+        }
+        .main-nav .navbar-nav .nav-link.active, .main-nav .navbar-nav
+        .nav-link:hover {
+            color: #ffc300;
+        }
+        .searching h2 span{
+            color:#ffc300
+        }
+        .main-biru {
+            background-color: #003566;
+            color:white;
+        }
+        .navbar.scrolled {
+            background-color: white;
+            transition: background-color 0.75s ease;
+            box-shadow: 0px -10px 30px #666;
+        }
+        .navbar.scrolled a.nav-link {
+            color: #666;
+        }
+        /* Horizontal Line */
+        .divider {								/* minor cosmetics */
+            display: table; 
+            font-size: 24px; 
+            text-align: center; 
+            width: 75%; 						/* divider width */
+            margin: 40px auto;					/* spacing above/below */
+        }
+        .divider span { display: table-cell; position: relative; }
+        .divider span:first-child, .divider span:last-child {
+            width: 50%;
+            top: 19px;							/* adjust vertical align */
+            -moz-background-size: 100% 2px; 	/* line width */
+            background-size: 100% 2px; 			/* line width */
+            background-position: 0 0, 0 100%;
+            background-repeat: no-repeat;
+        }
+        .divider span:first-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(#000));
+            background-image: -webkit-linear-gradient(180deg, transparent, #000);
+            background-image: -moz-linear-gradient(180deg, transparent, #000);
+            background-image: -o-linear-gradient(180deg, transparent, #000);
+            background-image: linear-gradient(90deg, transparent, #000);
+        }
+        .divider span:nth-child(2) {
+            color: #000; padding: 0px 5px; width: auto; white-space: nowrap;
+        }
+        .divider span:last-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(transparent));
+            background-image: -webkit-linear-gradient(180deg, #000, transparent);
+            background-image: -moz-linear-gradient(180deg, #000, transparent);
+            background-image: -o-linear-gradient(180deg, #000, transparent);
+            background-image: linear-gradient(90deg, #000, transparent);
+        }
+    </style>
+    <link rel="shortcut icon" href="assets/img/oracle.svg" type="image/x-icon">
+
+</head>
+<body>
+    <header class="navbar sticky-top navbar-dark navbar-expand-lg main-nav">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="/Hotel App/assets/img/oracle.png" alt="Bootstrap" width="160" height="20">
+            </a>
+          
+            <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto py-3">
+                <li class="nav-item">
+                <a class="nav-link px-3" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link active px-3" href="register-hotel.html">Join Us</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link px-3" href="login.html">Register|Login</a>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </header>
+    <div id="background-image">
+    <div class="container" style="padding-top: 1.5em;"><p></p></div>
+
+    <div class="container text-center">
+        <h1><b>One step more... Complete your data!</b></h1>
+
+    </div>
+
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="offset-lg-2 col-lg-8">
+
+                <div class="row g-3" action="#">
+                    <span class="border border-warning"></span>
+                    <div class="col-md-4">
+                    <label class="form-label"><b>Hotel Name</b></label>
+                    <input id="hotelName" type="text" class="form-control form-control-sm" placeholder="Enter your hotel name" autocomplete="off">
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label"><b>Username</b></label>
+                    <input id="hotelUsername" type="text" class="form-control form-control-sm" placeholder="Create username for your hotel" autocomplete="off">
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label"><b>Email</b></label>
+                    <input id="hotelEmail" type="email" class="form-control form-control-sm" placeholder="Enter your email" autocomplete="off">
+                    </div>
+
+                    <div class="col-md-6">
+                    <label class="form-label"><b>Password</b></label>
+                    <input id="hotelPassword" type="password" class="form-control form-control-sm" placeholder="Enter your password" autocomplete="off">
+                    <label class="form-text">Make the unpredictable password</label>
+                    </div>
+
+                    <div class="col-md-6">
+                    <label class="form-label"><b>Confirm Password</b></label>
+                    <input id="hotelPasswordConfirm" type="password" class="form-control form-control-sm" placeholder="Enter your password again" autocomplete="off">
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label"><b>Address</b></label>
+                    <input id="hotelAddress" type="text" class="form-control form-control-sm" placeholder="The address of your hotel" autocomplete="off">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label"><b>City</b></label>
+                        <input id="hotelCity" type="text" class="form-control form-control-sm" placeholder="The city of your hotel location" autocomplete="off">
+                        </div>
+
+                    <div class="col-4">
+                    <label class="form-label"><b>Phone Number</b></label>
+                    <input id="hotelPhone" type="text" class="form-control form-control-sm" placeholder="Your hotel phone number" autocomplete="off">
+                    </div>
+                
+                <div class="row g-3" >
+                    <span class="border border-warning"></span>
+
+                    <div class="col-6">
+                    <label class="form-label"><b>Superior Capacity</b></label>
+                    <input id="superiorCapacity" type="number" min="0" class="form-control form-control-sm">
+                    <label class="form-text">Choose the capacity of Superior room</label>
+                    </div>
+
+                    <div class="col-6">
+                    <label class="form-label"><b>Superior Price</b></label>
+                    <input id="superiorPrice" type="number" min="0" class="form-control form-control-sm">
+                    <label class="form-text">Set price for Superior room</label>
+                    </div>
+
+                    <div class="col-12">
+                    <label class="form-label"><b>Superior Room Facility</b></label>
+                    <textarea id="superiorFacility" class="form-control form-control-sm"></textarea>
+                    </div>
+                    
+                </div>
+
+                <div class="row g-3" >
+                    <span class="border border-warning"></span>
+
+                    <div class="col-6">
+                    <label class="form-label"><b>Deluxe Capacity</b></label>
+                    <input min="0" id="deluxeCapacity" type="number" class="form-control form-control-sm">
+                    <label class="form-text">Choose the capacity of Deluxe room</label>
+                    </div>
+
+                    <div class="col-6">
+                    <label class="form-label"><b>Deluxe Price</b></label>
+                    <input min="0" id="deluxePrice" type="number" class="form-control form-control-sm">
+                    <label class="form-text">Set price for Deluxe room</label>
+                    </div>
+
+                    <div class="col-12">
+                    <label class="form-label"><b>Deluxe Room Facility</b></label>
+                    <textarea id="deluxeFacility" class="form-control form-control-sm"></textarea>
+                    </div>
+                    
+                </div>
+
+                <div class="row g-3" >
+                    <span class="border border-warning"></span>
+
+                    <div class="col-6">
+                    <label class="form-label"><b>Standard Capacity</b></label>
+                    <input min=0 id="standardCapacity" type="number" class="form-control form-control-sm">
+                    <label class="form-text">Choose the capacity of Standard room</label>
+                    </div>
+
+                    <div class="col-6">
+                    <label class="form-label"><b>Standard Price</b></label>
+                    <input min="0" id="standardPrice" type="number" class="form-control form-control-sm">
+                    <label class="form-text">Set price for Standard room</label>
+                    </div>
+
+                    <div class="col-12">
+                    <label class="form-label"><b>Standard Room Facility</b></label>
+                    <textarea id="standardFacility" class="form-control form-control-sm"></textarea>
+                    </div>
+                    
+                </div>
+
+
+                    <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox">
+                        <label class="form-check-label">
+                        I agree with <a href="#">term and condition</a>.
+                        </label>
+                    </div>
+                    </div>
+
+                    <div class="col-12">
+                    <button onclick="registerHotel()" type="submit" class="btn btn-warning w-100" href="login.html"><b>Register My Hotel</b></button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<section>
+    <footer class="bg-light text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-5" style="background-color:#001d3d;color: white;">
+          © 2022 Copyright: Oracle
+        </div>
+        <!-- Copyright -->
+      </footer>
+</section> 
+<script>
+    function registerHotel(){
+        let hotelName = document.getElementById("hotelName").value;
+        let username = document.getElementById("hotelUsername").value;
+        let email = document.getElementById("hotelEmail").value;
+        let password = document.getElementById("hotelPassword").value;
+        let passwordConfirm = document.getElementById("hotelPasswordConfirm").value;
+        let address = document.getElementById("hotelAddress").value;
+        let city = document.getElementById("hotelCity").value;
+        let phone = document.getElementById("hotelPhone").value;
+        let supCap = document.getElementById("superiorCapacity").value;
+        let supPrice = document.getElementById("superiorPrice").value;
+        let supFac = document.getElementById("superiorFacility").value;
+        let delCap = document.getElementById("deluxeCapacity").value;
+        let delPrice = document.getElementById("deluxePrice").value;
+        let delFac = document.getElementById("deluxeFacility").value;
+        let standCap = document.getElementById("standardCapacity").value;
+        let standPrice = document.getElementById("standardPrice").value;
+        let standFac = document.getElementById("standardFacility").value;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic YW5kcm8xOjEyMzQ1Njc4");
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            "hotel_name": hotelName,
+            "username": username,
+            "password": password,
+            "superior_capacity": supCap,
+            "deluxe_capacity": delCap,
+            "standard_capacity": standCap,
+            "superior_facility": supFac,
+            "deluxe_facility": delFac,
+            "standard_facility": standFac,
+            "superior_price": supPrice,
+            "deluxe_price": delPrice,
+            "standard_price": standPrice,
+            "city": city,
+            "hotel_address": address,
+            "hotel_phone": phone,
+            "email": email
+        });
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:5000/hotel", requestOptions)
+            .then(response => response.text())
+            .then(result => afterRegister())
+            .catch(error => console.log('error', error));
+    }
+
+    function afterRegister(){
+        console.log("Berhasil tambah hotel.");
+        alert("Congratulations, your hotel has been registered in Star Hotel. Please login to continue.");
+        window.location.href = "login.html"
+    }
+    // $(document).ready(function(){
+    // $('.pass_show').append('<span class="ptxt">Show</span>');  
+    // });
+    
+    // $(document).on('click','.pass_show .ptxt', function(){ 
+    // $(this).text($(this).text() == "Show" ? "Hide" : "Show"); 
+    // $(this).prev().attr('type', function(index, attr){return attr == 'password' ? 'text' : 'password'; }); 
+    // });
+</script>
+<script src="assets/js/jquery-3.6.1.min.js"></script>
+<script>
+    // When scrolling, navbar change the background
+    $(function(){
+    $(document).scroll(function(){ 
+        var $nav = $(".navbar");
+        if ($(this).scrollTop() > $nav.height()) {
+            $nav.addClass("scrolled");
+            $nav.removeClass("navbar-dark");
+            $nav.addClass("navbar-light");
+        } else {
+            $nav.removeClass("scrolled");
+            $nav.addClass("navbar-dark");
+            $nav.removeClass("navbar-light");
+        }
+        });
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+</body>
+</html>

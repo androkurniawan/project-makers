@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <Style>
+        .main-nav{
+            background-color: #003566;
+        }
+        .main-nav .navbar-nav a.nav-link{
+            color: white;
+            font-weight: 600;
+        }
+        .main-nav .navbar-nav .nav-link.active, .main-nav .navbar-nav
+        .nav-link:hover {
+            color: #ffc300;
+        }
+        .searching h2 span{
+            color:#ffc300
+        }
+        .main-biru {
+            background-color: #003566;
+            color:white;
+        }
+        .navbar.scrolled {
+            background-color: white;
+            transition: background-color 0.75s ease;
+            box-shadow: 0px -10px 30px #666;
+        }
+        .navbar.scrolled a.nav-link {
+            color: #666;
+        }
+        /* Horizontal Line */
+        .divider {								/* minor cosmetics */
+            display: table; 
+            font-size: 24px; 
+            text-align: center; 
+            width: 75%; 						/* divider width */
+            margin: 40px auto;					/* spacing above/below */
+        }
+        .divider span { display: table-cell; position: relative; }
+        .divider span:first-child, .divider span:last-child {
+            width: 50%;
+            top: 19px;							/* adjust vertical align */
+            -moz-background-size: 100% 2px; 	/* line width */
+            background-size: 100% 2px; 			/* line width */
+            background-position: 0 0, 0 100%;
+            background-repeat: no-repeat;
+        }
+        .divider span:first-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), to(#000));
+            background-image: -webkit-linear-gradient(180deg, transparent, #000);
+            background-image: -moz-linear-gradient(180deg, transparent, #000);
+            background-image: -o-linear-gradient(180deg, transparent, #000);
+            background-image: linear-gradient(90deg, transparent, #000);
+        }
+        .divider span:nth-child(2) {
+            color: #000; padding: 0px 5px; width: auto; white-space: nowrap;
+        }
+        .divider span:last-child {				/* color changes in here */
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#000), to(transparent));
+            background-image: -webkit-linear-gradient(180deg, #000, transparent);
+            background-image: -moz-linear-gradient(180deg, #000, transparent);
+            background-image: -o-linear-gradient(180deg, #000, transparent);
+            background-image: linear-gradient(90deg, #000, transparent);
+        }
+
+    </Style>
+    <link rel="shortcut icon" href="assets/img/oracle.svg" type="image/x-icon">
+</head>
+
+<body>
+
+<header class="navbar sticky-top navbar-dark navbar-expand-lg main-nav">
+    <div class="container">
+        <a class="navbar-brand" style="cursor: pointer;" id="oracle" onclick="customerOrHotel()">
+            <img src="/Hotel App/assets/img/oracle.png" alt="Bootstrap" width="160" height="20">
+        </a>
+      
+        <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto py-3">
+            <li class="nav-item">
+            <a class="nav-link active px-3" aria-current="page" href="#">Booking</a>
+            </li>
+            <!-- <li class="nav-item">
+            <a class="nav-link px-3" href="#">About Us</a>
+            </li> -->
+            <li class="nav-item">
+            <a class="nav-link px-3" href="index.html">Register|Login</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</header>
+
+<section id="horizontalLine" class="mb-0">
+    <div class="divider"><span></span><span>Booking</span><span></span></div>
+</section>
+
+<!-- <div class="text-center card mb-5" style="background-color:white;">
+    <div class="card-header">
+      <h4>Hotel with<span id="city"></span>with Checkin date<span id="checkin"></span><span>and Checkout date</span> <span id="checkout"></span></h4>
+    </div>
+</div> -->
+<main>
+  <div class="container offset-md-1 mb-1 py-2">
+    <div class="row g-5">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+              <img src="assets/img/caribooking.png" width="100%" height="300" class="d-block w-100" alt="">
+            </div>
+          </div>
+
+      <div class="col-md-5">
+        <div class="h-100 p-5 border bg-light">
+            <h1 id="hotelName">Hotel Name</h1>
+            <h2 id="hotelCity">City:</h2>
+            <h3 id="hotelAddress">Addres: </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section>
+    <div class="container py-2">
+        <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+          <h2 class="fw-normal"><span style="color:red;">Room</span> and <span style="color:red;">Facility</span></h2>
+        </div>
+      
+        <main>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-5">
+            
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header text-bg-danger py-3">
+                    <h4 class="my-0 fw-normal text-center">Superior Room</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title text-center pricing-card-title mb-3" id="superiorPrice">Rp 1.000.000<small class="text-muted fw-light" id="perNight1">/night</small></h1>
+                <div class="text-center">
+                    <p>Facility:</p>
+                    <p id="superiorFacility">Wifi</p>
+                </div>
+                    <small class="text-muted text-start" id="superiorStock">Stock: 5</small><br>
+                    <small class="text-muted text-start">Amount of room can't exceed stock.</small>
+                    <input class="col-md-4" id="superiorAmount" type="number" min="0" max=""> </input>
+                </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header text-bg-danger py-3">
+                    <h4 class="my-0 fw-normal text-center">Deluxe Room</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title mb-3 text-center" id="deluxePrice">Rp 15<small class="text-muted fw-light">/night</small></h1>
+                    <div class="text-center">
+                    <p>Facility:</p>
+                    <p id="deluxeFacility">Wifi</p>
+                </div>
+                    <small class="text-muted text-start" id="deluxeStock">Stock: 5</small><br>
+                    <small class="text-muted text-start">Amount of room can't exceed stock.</small>
+                    <input class="col-md-4" type="number" min="0" max="" id="deluxeAmount"> </input>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                  <div class="card-header text-bg-danger py-3">
+                    <h4 class="my-0 fw-normal text-center">Standard Room</h4>
+                  </div>
+                <div class="card-body">
+                    <h1 class="card-title text-center pricing-card-title mb-3" id="standardPrice">Rp 1.000.000<small class="text-muted fw-light">/night</small></h1>
+                <div class="text-center">
+                    <p>Facility:</p>
+                    <p id="standardFacility">Wifi</p>
+                </div>
+                    <small class="text-muted text-start" id="standardStock">Stock: 5</small><br>
+                    <small class="text-muted text-start">Amount of room can't exceed stock.</small>
+                    <input class="col-md-4" type="number" min="0" max="" id="standardAmount"> </input>
+                </div>
+                </div>
+          </div>
+      </main>
+      </div>
+    
+      <div class="d-flex flex-row mb-3 container">
+        <div class="p-2"><button class="btn btn-primary" onclick="totalPricess()">Refresh Price</button> Total price: Rp <span id="totalPrice"></span><span>,-</span></div>
+    </div>
+    
+    <div class="container">
+        <div class="col mb-5">
+        <button type="button" onclick="getCookies()" class="col-md-12 btn btn-warning">Book Now</button>
+        </div>
+    </div>
+
+</section>
+
+
+<footer class="bg-light text-center text-lg-start">
+    <div class="text-center p-5" style="background-color:#001d3d;color: white;">
+        © 2022 Copyright: Oracle
+    </div>
+</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script src="assets/js/jquery-3.6.1.min.js"></script>
+<script>
+    // When scrolling, navbar change the background
+    $(function(){
+    $(document).scroll(function(){ 
+        var $nav = $(".navbar");
+        if ($(this).scrollTop() > $nav.height()) {
+            $nav.addClass("scrolled");
+            $nav.removeClass("navbar-dark");
+            $nav.addClass("navbar-light");
+        } else {
+            $nav.removeClass("scrolled");
+            $nav.addClass("navbar-dark");
+            $nav.removeClass("navbar-light");
+        }
+        });
+    })
+</script>
+<script>
+    document.getElementById("superiorAmount").value = 0
+    document.getElementById("deluxeAmount").value = 0
+    document.getElementById("standardAmount").value = 0
+
+    let superior = document.getElementById("superiorAmount").value;
+    let deluxe = document.getElementById("deluxeAmount").value;
+    let standard = document.getElementById("standardAmount").value;
+
+
+    let id_Hotel = localStorage.getItem("idHotelClick");
+    let checkinDate = localStorage.getItem("checkin");
+    let checkoutDate = localStorage.getItem("checkout");
+    let cities = localStorage.getItem("city");
+
+    function hotelBooking(){
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+        "idHotel": id_Hotel,
+        "checkin": checkinDate,
+        "checkout": checkoutDate,
+        "city": cities
+        });
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:5000/hotelbooking", requestOptions)
+        .then(response => response.json())
+        .then(x => {
+            document.getElementById("superiorAmount").max = x[0]["superior_stock"]
+            document.getElementById("deluxeAmount").max = x[0]["deluxe_stock"]
+            document.getElementById("standardAmount").max = x[0]["standard_stock"]
+
+            document.getElementById("hotelName").innerHTML = x[0]["_hotel_name"]
+            document.getElementById("hotelCity").innerHTML = x[0]["city"]
+            document.getElementById("hotelAddress").innerHTML = `Address: ${x[0]["address"]}`
+            document.getElementById("superiorPrice").innerHTML = `Rp ${x[0]["superior_price"]}/night`
+            // document.getElementById("perNight1").innerHTML = "/night"
+            document.getElementById("deluxePrice").innerHTML = `Rp ${x[0]["deluxe_price"]}/night`
+            document.getElementById("standardPrice").innerHTML = `Rp ${x[0]["standard_price"]}/night`
+            document.getElementById("superiorStock").innerHTML = `Stock: ${x[0]["superior_stock"]}`
+            document.getElementById("deluxeStock").innerHTML = `Stock: ${x[0]["deluxe_stock"]}`
+            document.getElementById("standardStock").innerHTML = `Stock: ${x[0]["standard_stock"]}`
+            document.getElementById("superiorFacility").innerHTML = x[0]["superior_facility"]
+            document.getElementById("deluxeFacility").innerHTML = x[0]["deluxe_facility"]
+            document.getElementById("standardFacility").innerHTML = x[0]["standard_facility"]
+
+
+        })
+        .catch(error => console.log('error', error));    }
+
+    hotelBooking();
+
+    
+
+    // let totalPrice = (superior * x[0]["superior_price"]) + (deluxe * x[0]["deluxe_price"]) + (standard * x[0]["standard_price"])
+    // document.getElementById("totalPrice").innerHTML = `Total price: Rp ${totalPrice}`
+
+</script>
+
+<script>
+    function customerOrHotel() {
+        let token = document.cookie;
+        let splitToken = token.split(".");
+        let user = JSON.parse(atob(splitToken[1]));
+        let usernames = user["user"];
+        let passwords = user["passkey"];
+
+        let usernameOrEmail = usernames;
+        let password = passwords;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(usernameOrEmail + ":" + password));
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+        
+        fetch("http://127.0.0.1:5000/login", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+            if (result.message === "success" && result.user === "customer") {
+                window.location.href = "home-customer.html";
+            } else if (result.message === "success" && result.user === "hotel"){
+                window.location.href = "home-hotel.html"
+            }
+            })
+            .catch((error) => console.log(error));
+    }
+</script>
+
+<script>
+    function reservation(){
+        let id_Hotel = localStorage.getItem("idHotelClick");
+        let checkinDate = localStorage.getItem("checkin");
+        let checkoutDate = localStorage.getItem("checkout");
+        let cities = localStorage.getItem("city");
+        let superiors = document.getElementById("superiorAmount").value;
+        let deluxes = document.getElementById("deluxeAmount").value;
+        let standards = document.getElementById("standardAmount").value;
+
+        let token = document.cookie;
+        let splitToken = token.split(".");
+        let user = JSON.parse(atob(splitToken[1]));
+        let usernames = user["user"];
+        let passwords = user["passkey"];
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(usernames + ":" + passwords));
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+        "check_in_date": checkinDate,
+        "check_out_date": checkoutDate,
+        "amount_of_superior_room": superiors,
+        "amount_of_deluxe_room": deluxes,
+        "amount_of_standard_room": standards,
+        "hotel_id": id_Hotel
+        });
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+        };
+
+        fetch("http://127.0.0.1:5000/booking", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            alert("Success booking a hotel.")
+            window.location.href = "mybooking.html"
+        })
+        .catch(error => console.log('error', error));
+    }
+</script>
+
+<script>
+function getCookies(){
+    let cookies = document.cookie;
+    let x = cookies.split("=");
+    let y = x[1];
+    if(y == null) {
+        window.location.href = "loginbooking.html";
+    } else {
+        customerOrHotel2();
+    }
+}
+
+function customerOrHotel2() {
+    let token = document.cookie;
+    let splitToken = token.split(".");
+    let user = JSON.parse(atob(splitToken[1]));
+    let usernames = user["user"];
+    let passwords = user["passkey"];
+ 
+        let usernameOrEmail = usernames;
+        let password = passwords;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(usernameOrEmail + ":" + password));
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+        
+        fetch("http://127.0.0.1:5000/login", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+            if (result.message === "success" && result.user === "customer") {
+                reservation()
+            } else if (result.message === "success" && result.user === "hotel"){
+                alert("Only customer can booking a hotel.")
+            }
+            })
+            .catch((error) => console.log(error));
+}
+</script>
+<script>
+    function getCookie(){
+    let cookies = document.cookie
+    let x = cookies.split("=")
+    let y = x[1]
+    if(y == null) {
+        // window.location.href = "index.html"
+    } else {
+        customerOrHotel3();
+    }
+}
+    
+function customerOrHotel3() {
+    let token = document.cookie;
+    let splitToken = token.split(".");
+    let user = JSON.parse(atob(splitToken[1]));
+    let usernames = user["user"];
+    let passwords = user["passkey"];
+
+        let usernameOrEmail = usernames;
+        let password = passwords;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic " + btoa(usernameOrEmail + ":" + password));
+
+        var raw = "";
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+        
+        fetch("http://127.0.0.1:5000/login", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+            if (result.message === "success" && result.user === "customer") {
+                window.location.href = "booking-customer.html";
+            } else if (result.message === "success" && result.user === "hotel"){
+                // window.location.href = "home-hotel.html"
+            }
+            })
+            .catch((error) => console.log(error));
+}
+customerOrHotel3();
+</script>
+<script>
+    function totalPricess(){
+        let superiors = document.getElementById("superiorAmount").value;
+        let deluxes = document.getElementById("deluxeAmount").value;
+        let standards = document.getElementById("standardAmount").value;
+        var myHeaders = new Headers();
+
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+        "idHotel": id_Hotel,
+        "checkin": checkinDate,
+        "checkout": checkoutDate,
+        "city": cities
+        });
+
+        var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:5000/hotelbooking", requestOptions)
+        .then(response => response.json())
+        .then(x => {
+            let totalPrices = (superiors * x[0]["superior_price"]) + (deluxes * x[0]["deluxe_price"]) + (standards * x[0]["standard_price"]);
+            document.getElementById("totalPrice").innerHTML = totalPrices;
+        })
+    }
+</script>
+</body>
+
+</html>
